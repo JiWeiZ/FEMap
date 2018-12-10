@@ -42,6 +42,8 @@ module.exports = {
                 collapsable: false,
                 children: [
                     'HTTP/network-architecture',
+                    'HTTP/network-layer',
+                    'HTTP/transport-layer',
                     'HTTP/CORS',
                     'HTTP/DNS',
                 ]
