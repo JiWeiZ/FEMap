@@ -1,0 +1,23 @@
+{
+  "name": "femap",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vuepress dev docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JiWeiZ/FEMap.git"
+  },
+  "author": "JiWeiZ",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JiWeiZ/FEMap/issues"
+  },
+  "homepage": "https://github.com/JiWeiZ/FEMap#readme",
+  "devDependencies": {
+    "vuepress": "^0.14.8"
+  }
+}
