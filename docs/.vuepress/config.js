@@ -38,14 +38,15 @@ module.exports = {
                 ]
             },
             {
-                title: 'HTTP',
+                title: '网络',
                 collapsable: false,
                 children: [
-                    'HTTP/network-architecture',
-                    'HTTP/network-layer',
-                    'HTTP/transport-layer',
-                    'HTTP/CORS',
-                    'HTTP/DNS',
+                    'Network/network-architecture',
+                    'Network/network-layer',
+                    'Network/transport-layer',
+                    'Network/CORS',
+                    'Network/DNS',
+                    'Network/cache',
                 ]
             },         
         ]
