@@ -304,6 +304,8 @@ span的font-size是50px，也就是“高度大于50px”这几个字的高度�
 
 父级元素display:table-cell; vertical-align:middle;
 
+**vertical-align只能用于行级元素或表单元格元素**
+
 ```html
 <div style="
             display:table-cell;
@@ -333,8 +335,7 @@ span的font-size是50px，也就是“高度大于50px”这几个字的高度�
 </div>
 
 
-
-1. 使用行高
+2. 使用行高
 
 ```html
 <div style="
@@ -403,6 +404,12 @@ span的font-size是50px，也就是“高度大于50px”这几个字的高度�
 test1 `div`有文字大小，但行高为`0`，结果`div`的高度就是个`0`；test2 `div`文字大小为`0`，但是有行高，为`20`像素，结果`div`高度就是`20`像素。这就说明撑开`div`高度的是`line-height`不是文字内容。
 
 行高有一个特性叫做垂直居中性。`line-height`的最终表现是通过`line boxes`实现的，而无论`line boxes`所占据的高度是多少（无论比文字大还是比文字小），其占据的空间都是与文字内容公用水平中垂线的。
+
+3. inline-block 元素
+
+inline-block元素可以设置宽高，同时又可以使用vertical-align: middle
+
+<iframe width="100%" height="200" src="//jsfiddle.net/happysir/Lv27tow1/9/embedded/html,css,result/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
 
 ## 属性值与百分数
 

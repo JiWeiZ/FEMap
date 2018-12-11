@@ -27,7 +27,8 @@ module.exports = {
                 title: 'JS',
                 collapsable: false,
                 children: [
-                    'JS/js-thread'
+                    'JS/js-thread',
+                    'JS/UI',
                 ]
             },
             {

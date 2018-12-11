@@ -1,3 +1,4 @@
 # 前端知识小记
 
-个人知识笔记，主要是前端相关
+Welcome! This is a personal front end knowledge notes. Wish it helps.
+

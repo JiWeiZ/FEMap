@@ -140,4 +140,4 @@ module.exports = function checkCache(stats, req, res) {
 
 ![1543829136842](../.vuepress/public/assets/1543829136842.png)
 
-最后附上源代码：
+最后附上源代码：https://github.com/JiWeiZ/FEMap/tree/master/codes/Network/cache
