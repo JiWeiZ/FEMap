@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div{
+            margin: 10px;
+            padding: 10px;
+            border: 2px solid;
+        }
+        p {
+            margin: 5px;
+            padding: 5px;
+            border: 1px solid;
+        }
+        span {
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <p id="time"></p>
+        <p id="code"></p>
+        <p>
+            <input type="text" id="inputCode">
+            <button id="button">发送</button>
+            <span id="tips">还未发送</span>
+        </p>
+    </div>
+</body>
+<script>
+    let code = document.querySelector("#code")
+    let codePrevious, expire
+    setInterval(() => {
+        time.innerHTML = new Date().toLocaleString()
+    }, 1000)
+    function poll () {
+        const xhr = new XMLHttpRequest(),
+            method = 'GET',
+            url = 'http://localhost:8066/qrcode'
+        xhr.open(method, url)
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    let xhrData = JSON.parse(xhr.responseText)
+                    if (codePrevious !== xhrData.code) {
+                        codePrevious = xhrData.code
+                        code.innerHTML = codePrevious
+                        expire = parseInt(xhrData.expire, 10)
+                        setTimeout(poll, expire)
+                    }
+                }
+            }
+        }
+        xhr.send()
+    }
+    poll()
+    function check (code) {
+        const xhr = new XMLHttpRequest(),
+            method = 'GET',
+            url = `http://localhost:8066/check/${code}`
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                tips.innerHTML = xhr.responseText
+            }
+        }
+        xhr.open(method, url)
+        xhr.send()
+    }
+    button.addEventListener('click', function () {
+        let code = inputCode.value
+        check(code)
+    })
+</script>
+</html>

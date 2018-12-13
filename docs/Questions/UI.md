@@ -5,3 +5,6 @@
 <iframe width="100%" height="500" src="//jsfiddle.net/happysir/jf7w1m2b/10/embedded/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
 
 ## 图片预览
+
+<iframe width="100%" height="500" src="//jsfiddle.net/happysir/v6te8duh/6/embedded/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+
