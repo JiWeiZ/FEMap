@@ -32,6 +32,8 @@ module.exports = {
           'JS/function',
           'JS/event',
           'JS/event-loop',
+          'JS/distance',
+          'JS/regex',
           'JS/ajax',
           'JS/high-level',
           'JS/byhand',
@@ -65,13 +67,13 @@ module.exports = {
         title: '算法/数据结构',
         collapsable: false,
         children: [
-          'Algorithm/',
+          '',
         ]
       } , {
         title: '工程化',
         collapsable: false,
         children: [
-          'Engineering/',
+          '',
         ]
       } , {
         title: 'Vue',

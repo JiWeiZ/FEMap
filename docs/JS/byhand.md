@@ -36,10 +36,10 @@ console.log([p2.x, p2.y, p2.getLength(), p2 instanceof Point])
 
 myNew函数经历4步：
 
-1. 设置prototype
-2. object.create
-3. apply构造函数
-4. return
+1. 设置prototype（确保instanceof正确）
+2. object.create（实现继承）
+3. apply构造函数（调用构造函数）
+4. return（返回）
 
 ```js
 function myNew (fn) {

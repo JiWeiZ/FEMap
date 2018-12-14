@@ -32,9 +32,15 @@
 
 也就是说，position: fixed元素使用top和left定位不一定是相对于视口的
 
+### 示例1
+
 <iframe width="100%" height="240" src="//jsfiddle.net/happysir/vfmqd3ku/2/embedded/html,css,result/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
 
 <iframe width="100%" height="240" src="//jsfiddle.net/happysir/vfmqd3ku/3/embedded/html,css,result/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+
+### 示例2
+
+<iframe width="100%" height="450" src="//jsfiddle.net/happysir/s9q645ug/embedded/html,css,result/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
 
 ## 块级格式化上下文(BFC)
 

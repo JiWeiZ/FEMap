@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>页面各种距离</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    .wrapper {
+      position: relative;
+      width: 100%;
+      height: 300px;
+      background: #ddd;
+      border: 10px solid;
+    }
+
+    #div1 {
+      position: absolute;
+      top: 10px;
+      height: 100px;
+      width: 100%;
+      background: #0cc;
+    }
+
+    .wrapper1 {
+      position: static;
+      margin: 20px;
+      padding: 20px;
+      border: 1px solid #000;
+      height: 100px;
+      background: #ddd;
+      /* transform: translate(0, 0) */
+      /* filter: blur(0px); */
+    }
+
+    .fixed1 {
+      position: fixed;
+      height: 50px;
+      width: 50px;
+      background: gray;
+      top: 0;
+    }
+
+    .wrapper2 {
+      position: relative;
+      margin: 20px;
+      padding: 20px;
+      border: 10px solid #000;
+      height: 100px;
+      background: #ddd;
+      transform: translate(0, 0)
+        /* filter: blur(0px); */
+    }
+
+    .fixed2 {
+      position: fixed;
+      height: 50px;
+      width: 50px;
+      background: gray;
+      top: 0;
+    }
+
+    .wrapper3 {
+      position: relative;
+      margin: 20px;
+      padding: 20px;
+      border: 10px solid #000;
+      background: #ddd;
+    }
+    .outer3 {
+      margin: 20px;
+      padding: 20px;
+      border: 10px solid #000;
+      height: 60px;
+      background: #777;
+    }
+    .inner3 {
+      position: absolute;
+      height: 50px;
+      width: 50px;
+      background: #0cc;
+      top: 0;
+      left: 0;
+    }
+    .move {
+      transform: translate(0, 0);
+        /* filter: blur(0px); */
+    }
+
+    .wrapper4 {
+      margin: 20px;
+      padding: 20px;
+      border: 10px solid #000;
+      background: #ddd;
+      height: 100px;
+      overflow: scroll;
+    }
+
+    .inner4 {
+      margin: 10px;
+      border: 10px solid #cc0;
+      padding: 10px;
+      height: 500px;
+      width: 50px;
+      background: #0cc;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div id="div1"></div>
+  </div>
+
+  <div class="wrapper1">
+    <div class="fixed1"></div>
+  </div>
+
+  <div class="wrapper2">
+    <div class="fixed2"></div>
+  </div>
+
+  <div class="wrapper3">
+    <div class="outer3">
+        <div class="inner3"></div>
+    </div>
+    <div class="outer3 move">
+      <div class="inner3"></div>
+    </div>
+  </div>
+
+  <div class="wrapper4">
+    <div class="inner4"></div>
+  </div>
+</body>
+
+</html>

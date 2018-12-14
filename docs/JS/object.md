@@ -1,10 +1,10 @@
-# 原型链和对象继承
+# 对象相关
 
 ## 对象继承
 
 ### 一切都是对象
 
-在JavaScript这门语言中，获取对象的唯一途径就是克隆，而JavaScript中的根对象是Object.prototype，我们遇到的每一个对象实际上都是从这个Object.prototype克隆而来的。但我们并不需要关系克隆的细节，因为这是引擎内部负责实现的，我们只需要调用var obj1 = new Object()或者var obj2 = {}，内部引擎就会从Object.prototype上克隆一个对象出来。所以可以这么说：在JavaScript中，一切都是对象。
+在JavaScript这门语言中，获取对象的唯一途径就是克隆，而JavaScript中的根对象是Object.prototype，我们遇到的每一个对象实际上都是从这个Object.prototype克隆而来的。但我们并不需要关系克隆的细节，因为这是引擎内部负责实现的，我们只需要调用var obj1 = new Object()或者var obj2 = {}，内部引擎就会从Object.prototype上克隆一个对象出来。可以这么说：在JavaScript中，除了基本类型，一切都是对象。
 
 我们先来看一下下面这个2行代码
 
@@ -21,24 +21,32 @@ var f = new F()
 4. \_\_proto\_\_属性
 5. new操作符
 
+#### 构造函数
+
 所谓的构造函数其实就是普通的函数，叫作构造函数仅仅是告诉我们：这个函数将来是被用作创建对象的。
+
+#### prototype属性
 
 在JavaScript中，每一个函数都有天然的拥有5个属性：length, name, arguments, caller, prototype。
 
-![](https://upload-images.jianshu.io/upload_images/12896055-8f3821f156ecd2c8.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/428/format/webp)
+![1544753127457](../.vuepress/public/assets/1544753127457.png)
 
-*PS: 几个获取对象属性名的API*
+*PS: 几个获取对象属性名的 API*
 
 ```js
-Object.keys(obj) // 获取obj的属性名（无法获取Symbol属性）
-Object.getOwnPropertyNames(obj)  // 获取obj的属性名（无法获取Symbol属性）
-Object.getOwnPropertySymbols(obj)  // 获取obj的Symbol属性名
-Reflect.ownKeys(obj)  // 获取obj所有类型的键名，包括常规键名和 Symbol 键名。
+Object.keys(obj) 					// 获取obj的属性名（无法获取Symbol属性）
+Object.getOwnPropertyNames(obj)     // 获取obj的属性名（无法获取Symbol属性）
+Object.getOwnPropertySymbols(obj)   // 获取obj的Symbol属性名
+Reflect.ownKeys(obj)  				// 获取obj所有类型的键名，包括常规键名和 Symbol 键名。
 ```
+
+#### constructor属性
 
 函数的prototype属性指向一个对象，这个对象在创建函数的时候自动生成，并且拥有一个constructor属性，constructor属性指向这个函数。
 
-在上面的那2行代码中，f是构造函数F()生成的对象，通过设置构造函数的prototype实现原型继承的时候，除了根对象Object.prototype  ，任何对象都有一个内部属性[[Prototype]]，它指向这个构造函数的原型
+在上面的那2行代码中，f是构造函数F()生成的对象，通过设置构造函数的prototype实现原型继承的时候，除了根对象Object.prototype，任何对象都有一个内部属性[[Prototype]]，它指向这个构造函数的原型。
+
+#### _\_proto\_\_ 属性
 
 当调用构造函数创建一个新实例后，该实例的内部将包含一个指针（内部属性） ，指向构造函数的原型对象。ECMA-262 第 5 版中管这个指针叫 [[Prototype]] 。虽然在脚本中没有标准的方式访问 [[Prototype]] ，但 Firefox、Safari 和 Chrome 在每个对象上都支持一个属性\_\_proto\_\_ ；而在其他实现中，这个属性对脚本则是完全不可见的。*——《 javaScript高级程序设计（第三版）P148 》*
 
@@ -54,16 +62,20 @@ Reflect.ownKeys(obj)  // 获取obj所有类型的键名，包括常规键名和 
 4. 对于使用 new fun 创建的对象，其中fun是由js提供的内建构造器函数之一(Array, Boolean, Date, Number, Object, String 等等），这个值总是fun.prototype。
 5. **对于用js定义的其他js构造器函数创建的对象，这个值就是该构造器函数的prototype属性。**（这是最常见的形式）
 
-\_\_proto\_\_ 的设置器(setter)允许对象的 [[Prototype]]被变更。前提是这个对象必须通过 Object.isExtensible(): 进行扩展，如果不这样，一个 TypeError 错误将被抛出。要变更的值必须是一个object或null，提供其它值将不起任何作用。
+\_\_proto\_\_ 的设置器(setter)只接受object和null作为参数。并且_\_proto\_\_ 的设置器(setter)允许更改对象的 [[Prototype]]前提是这个对象是可扩展的。（即可以为对象**添加**新的属性，对象的\_\_proto\_\_  属性可以被更改。）即：
 
-默认情况下，对象是可扩展的：即可以为他们添加新的属性。以及它们的\_\_proto\_\_  属性可以被更改。Object.preventExtensions，Object.seal 或 Object.freeze 方法都可以标记一个对象为不可扩展（non-extensible）。
+```js
+Object.isExtensible(obj) === true
+```
+
+默认情况下，对象是可扩展的。Object.preventExtensions，Object.seal 或 Object.freeze 方法都可以标记一个对象为不可扩展（non-extensible）。
 
 ```js
 // 新对象默认是可扩展的.
 var empty = {};
 Object.isExtensible(empty); // === true
 
-// ...可以变的不可扩展.
+// ...不可扩展.
 Object.preventExtensions(empty);
 Object.isExtensible(empty); // === false
 
@@ -249,17 +261,102 @@ Object.setPrototypeOf(Point2D.prototype, Point.prototype)
 
 #### 如何创建没有原型的对象
 
-通过设置构造函数的prototype实现原型继承的时候，除了根对象Object.prototype，任何对象都有一个内部属性[[Prototype]]
+通过设置构造函数的prototype实现原型继承的时候，除了根对象Object.prototype，任何对象都有一个内部属性[[Prototype]]。
 
-那么我们如何创建没有原型的对象呢？通过Object.create(null)就可以实现。
+如何创建没有原型的对象呢？通过Object.create(null)就可以实现。
 
 ```javascript
 let obj = Object.create(null)    // obj没有原型对象
 ```
 
-## Object.defineProperty()
+## 对象深拷贝
 
+### 1. 递归
 
+停止递归的条件：该属性不是对象
 
+```js
+function deepClone (obj) {
+    if (!obj || typeof obj !== 'object') return obj
+    let _obj = new obj.constructor()
+    Object.keys(obj).forEach(key => _obj[key] = deepClone(obj[key]))
+    return _obj
+}
+```
 
+测试：
+
+```js
+function People(contry, hobby, age) {
+  this.contry = contry
+  this.hobby = ['music', 'sports', 'reading']
+  this.age = age
+}
+
+People.prototype.sayContry = () => { console.log(`I'm from ${this.contry}`) }
+
+var father = new People('China', 'old John', 50)
+var son = new People('China', 'little John', 30)
+var wife = new People('US', 'Cristina', 30)
+father.son = son
+son.wife = wife
+```
+
+### 2. JSON序列化
+
+```js
+var deepClone = (obj) => JSON.parese(JSON.stringfy(obj))
+```
+
+### 3. Object.assign()
+
+只进行一层深拷贝
+
+```js
+let obj2 = Object.assign({}, obj1)
+```
+
+## 不屏蔽原型链上的属性值
+
+设置属性值的writable为false即可。
+
+**在调用 Object.defineProperty() 方法时，如果不指定， configurable 、 enumerable 和writable 特性的默认值都是 false** 。如果调用Object.defineProperty() 方法只是修改已定义的属性，则无此限制。
+
+### 示例1
+
+```js
+function Car () {
+}
+Object.defineProperty(Car.prototype, 'color', {
+    value: 'white',
+    writable: true
+})
+var car = new Car ();
+car.color = 'black';
+console.log(car.color); // white
+```
+
+### 示例2
+
+```js
+function Person () {
+}
+Object.defineProperties(Person.prototype, {
+    _age: {
+        value: 1
+    },
+    age: {
+        get: function() {
+            return this._age;
+        },
+        set: function(val) {
+            this._age = val;
+        }
+    }
+})
+var a = new Person ();
+var b = new Person ();
+a.age = 2;
+console.log(a._age); //1
+```
 
