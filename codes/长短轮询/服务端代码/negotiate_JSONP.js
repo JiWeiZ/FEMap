@@ -5,7 +5,7 @@ class CodeGenerator {
     constructor () {
         this.code = undefined
         this.previousCode = undefined
-        this.expire = undefined
+        this.expire = ('' + Math.random()).slice(-8)
     }
     check (code) {
         return code === this.code || code === this.previousCode ? '验证通过' : '验证不通过'
@@ -21,20 +21,17 @@ class CodeGenerator {
 }
 
 let code_generator = new CodeGenerator()
-code_generator.update(10000)
+code_generator.update(5000)
 
 app.get('/qrcode', function (req, res) {
-
-    res.setHeader('Access-control-Allow-Origin', '*')
-
     // 自己拼jsonp
-    // let callback = req.query.callback
-    // let json = `{"code": ${code_generator.code}, "expire": ${code_generator.expire}}`
-    // let jsonp = `${callback}(${json})`
-    // res.send(jsonp)
-    
+    let callback = req.query.callback
+    let sendData = `{"code": ${code_generator.code}, "expire": ${code_generator.expire}}`
+    let jsonp = `${callback}(${sendData})`
+    res.send(jsonp)
+
     // 使用express的jsonp函数
-    res.jsonp({code: code_generator.code, expire: code_generator.expire})
+    // res.jsonp({code: code_generator.code, expire: code_generator.expire})
 })
 
 app.get('/check/:code', function (req, res) {

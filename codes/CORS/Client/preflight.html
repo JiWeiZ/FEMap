@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +12,7 @@
   <div>
     <input type="text" id="inputCode">
     <button id="button">发送</button>
-    <span id="tips">还未发送</span>
+    <p id="tips">还未发送</p>
   </div>
 </body>
 <script>
@@ -23,7 +24,7 @@
     xhr.open(method, url)
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4 && xhr.status === 200) {
-        tips.innerHTML = xhr.responseText
+        tips.innerHTML = xhr.getAllResponseHeaders()
       }
     }
     xhr.setRequestHeader('Content-Type', 'application/json')

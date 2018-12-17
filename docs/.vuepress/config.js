@@ -53,7 +53,7 @@ module.exports = {
           'Network/network-architecture',
           'Network/network-layer',
           'Network/transport-layer',
-          'Network/CORS',
+          'Network/cross-domain',
           'Network/DNS',
           'Network/cache',
         ]
