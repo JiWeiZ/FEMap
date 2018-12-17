@@ -38,6 +38,7 @@ module.exports = {
           'JS/high-level',
           'JS/byhand',
           'JS/repaint-reflow',
+          'JS/recursive',
         ]
       }, {
         title: 'CSS',

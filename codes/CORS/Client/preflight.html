@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <div>
+    <input type="text" id="inputCode">
+    <button id="button">发送</button>
+    <span id="tips">还未发送</span>
+  </div>
+</body>
+<script>
+  function check(code) {
+    const xhr = new XMLHttpRequest(),
+      method = 'POST',
+      url = `http://localhost:8066/check`,
+      data = JSON.stringify({ code })
+    xhr.open(method, url)
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        tips.innerHTML = xhr.responseText
+      }
+    }
+    xhr.setRequestHeader('Content-Type', 'application/json')
+    xhr.setRequestHeader('Foo-Header', 'bar')
+    xhr.send(data)
+  }
+  button.addEventListener('click', function () {
+    let code = inputCode.value
+    check(code)
+  })
+</script>
+
+</html>
