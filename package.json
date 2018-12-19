@@ -8,7 +8,7 @@
     "dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
     "deploy": "bash deploy.sh"
-   },
+  },
   "pre-push": [
     "deploy"
   ],
@@ -23,7 +23,9 @@
   },
   "homepage": "https://github.com/JiWeiZ/FEMap#readme",
   "devDependencies": {
+    "handlebars": "^4.0.12",
     "pre-push": "^0.1.1",
     "vuepress": "^0.14.8"
-  }
+  },
+  "dependencies": {}
 }

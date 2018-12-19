@@ -141,3 +141,17 @@ module.exports = function checkCache(stats, req, res) {
 ![1543829136842](../.vuepress/public/assets/1543829136842.png)
 
 最后附上源代码：https://github.com/JiWeiZ/FEMap/tree/master/codes/Network/cache
+
+## 浏览器的3种刷新方式
+
+**1. 在地址栏中输入URL访问**
+
+正常的缓存策略。对所有没有过期的内容直接使用本地缓存，从而减少了对浏览器的请求。
+
+**2. 按F5或浏览器刷新按钮**
+
+这个时候浏览器会在请求头里面加`Cache-Control: max-age=0`，从而禁用强缓存。
+
+**3. 按Ctrl+F5或按Ctrl并点击刷新按钮**
+
+这种方式就是强制刷新，浏览器不会发送`If-Modified-Since`请求头，也不会发`if-none-match`请求头，并且还会加上`Cache-Control: no-cache`和`Pragma: no-cache`，此时总会发起一个全新的请求，服务器不会使用任何缓存资源。

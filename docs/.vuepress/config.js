@@ -51,10 +51,12 @@ module.exports = {
         collapsable: false,
         children: [
           'Network/network-architecture',
+          'Network/link-layer',
           'Network/network-layer',
           'Network/transport-layer',
           'Network/cross-domain',
           'Network/DNS',
+          'Network/CDN',
           'Network/cache',
         ]
       }, {

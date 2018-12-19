@@ -3,7 +3,6 @@ const fs = require('fs')
 const path = require('path')
 const chalk = require('chalk')
 const Handlebars = require('handlebars')
-const checksum = require('checksum')
 const promisify = require('util').promisify
 const readdir = promisify(fs.readdir)
 const stat = promisify(fs.stat)

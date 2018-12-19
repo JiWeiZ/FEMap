@@ -2,38 +2,6 @@
 
 ## 手写new
 
-**题目：**
-
-```js
-function Point(x, y) {
-    this.x = x
-    this.y = y
-}
-
-Point.prototype.getLength = function () {
-    let {x, y} = this
-    return Math.sqrt(x * x + y * y)
-}
-var p1 = new Point(5, 12)
-console.log([p1.x, p1.y, p1.getLength(), p1 instanceof Point])
-// [5, 12, 13, true]
-```
-
-实现一个myNew函数
-
-```js
-var p2 = myNew(Point)(3, 4)
-```
-
-使得下面的输出正确
-
-```js
-console.log([p2.x, p2.y, p2.getLength(), p2 instanceof Point])
-// 输出 [3, 4, 5, true]
-```
-
-**参考解答**
-
 myNew函数经历4步：
 
 1. 设置prototype（确保instanceof正确）
@@ -44,10 +12,10 @@ myNew函数经历4步：
 ```js
 function myNew (fn) {
     return function f (...args) {
-        f.prototype = fn.prototype
-        let obj = Object.create(fn.prototype)
-        fn.apply(obj, args)
-        return obj
+        f.prototype = fn.prototype // 确保instanceof正确
+        let obj = Object.create(fn.prototype) // 创建一个新对象
+        fn.apply(obj, args) // 设置this，调用构造函数
+        return obj // 返回这个对象
     }
 }
 ```
