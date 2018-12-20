@@ -325,18 +325,8 @@ span的font-size是50px，也就是“高度大于50px”这几个字的高度�
 </div>
 ```
 
-<div style="
-            display:table-cell;
-            height: 300px;
-            width: 100%;
-            background: gray;
-            vertical-align:middle;">
-  <span>
-话说天下大势，分久必合，合久必分。周末七国分争，并入于秦。及秦灭之后，楚、汉分争，又并入于汉。汉朝自高祖斩白蛇而起义，一统天下，后来光武中兴，传至献帝，遂分为三国。推其致乱之由，殆始于桓、灵二帝。桓帝禁锢善类，崇信宦官。及桓帝崩，灵帝即位，大将军窦武、太傅陈蕃共相辅佐。时有宦官曹节等弄权，窦武、陈蕃谋诛之，机事不密，反为所害，中涓自此愈横。
-  </span>
+<div style="display:table-cell;height: 300px;width: 100%;background: gray;vertical-align:middle;"><span>话说天下大势，分久必合，合久必分。周末七国分争，并入于秦。及秦灭之后，楚、汉分争，又并入于汉。汉朝自高祖斩白蛇而起义，一统天下，后来光武中兴，传至献帝，遂分为三国。推其致乱之由，殆始于桓、灵二帝。桓帝禁锢善类，崇信宦官。及桓帝崩，灵帝即位，大将军窦武、太傅陈蕃共相辅佐。时有宦官曹节等弄权，窦武、陈蕃谋诛之，机事不密，反为所害，中涓自此愈横。</span>
 </div>
-
-
 
 
 2. 使用行高
@@ -356,17 +346,8 @@ span的font-size是50px，也就是“高度大于50px”这几个字的高度�
 </div>
 ```
 
-<div style="
-            background: gray;
-            line-height: 300px;
-            ">
-    <span style="
-                 display: inline-block;
-                 vertical-align: middle;
-                 line-height: 1.4em;
-                 ">
-话说天下大势，分久必合，合久必分。周末七国分争，并入于秦。及秦灭之后，楚、汉分争，又并入于汉。汉朝自高祖斩白蛇而起义，一统天下，后来光武中兴，传至献帝，遂分为三国。推其致乱之由，殆始于桓、灵二帝。桓帝禁锢善类，崇信宦官。及桓帝崩，灵帝即位，大将军窦武、太傅陈蕃共相辅佐。时有宦官曹节等弄权，窦武、陈蕃谋诛之，机事不密，反为所害，中涓自此愈横。
-	</span>
+<div style="background: gray;line-height: 300px;">
+    <span style="display: inline-block;vertical-align: middle;line-height: 1.4em;">话说天下大势，分久必合，合久必分。周末七国分争，并入于秦。及秦灭之后，楚、汉分争，又并入于汉。汉朝自高祖斩白蛇而起义，一统天下，后来光武中兴，传至献帝，遂分为三国。推其致乱之由，殆始于桓、灵二帝。桓帝禁锢善类，崇信宦官。及桓帝崩，灵帝即位，大将军窦武、太傅陈蕃共相辅佐。时有宦官曹节等弄权，窦武、陈蕃谋诛之，机事不密，反为所害，中涓自此愈横。</span>
 </div>
 
 
@@ -389,18 +370,9 @@ span的font-size是50px，也就是“高度大于50px”这几个字的高度�
             margin:30px;">测试</div>
 ```
 
-<div class="test1" style="
-            font-size:20px;
-            line-height:0; 
-            border:1px solid #cccccc;
-            background:#eeeeee;
-            margin:30px;">测试</div>
-<div class="test2" style="
-            font-size:0px;
-            line-height:20px; 
-            border:1px solid #cccccc;
-            background:#eeeeee;
-            margin:30px;">测试</div>
+<div class="test1" style="font-size:20px;line-height:0;border:1px solid #cccccc;background:#eeeeee;margin:30px;">测试</div>
+<div class="test2" style="font-size:0px;line-height:20px;border:1px solid #cccccc;background:#eeeeee;margin:30px;">测试</div>
+
 
 test1 `div`有文字大小，但行高为`0`，结果`div`的高度就是个`0`；test2 `div`文字大小为`0`，但是有行高，为`20`像素，结果`div`高度就是`20`像素。这就说明撑开`div`高度的是`line-height`不是文字内容。
 
@@ -425,7 +397,7 @@ inline-block的行为好复杂，我没太搞懂，暂且把代码贴一下
 
 计算 height top 及 bottom ：基于包含块的 height 的值。
 
-<span style="background:yellow">**特别强调**：</span>
+**特别强调**：
 
 - padding-top
 - padding-bottom

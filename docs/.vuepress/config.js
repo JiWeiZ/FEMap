@@ -44,7 +44,9 @@ module.exports = {
         title: 'CSS',
         collapsable: false,
         children: [
-          'CSS/visual-format'
+          'CSS/visual-format',
+          'CSS/float-position',
+          'CSS/visibility-z-index',
         ]
       }, {
         title: '网络',
