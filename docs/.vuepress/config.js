@@ -47,6 +47,8 @@ module.exports = {
           'CSS/visual-format',
           'CSS/float-position',
           'CSS/visibility-z-index',
+          'CSS/text',
+          'CSS/css-selector',
         ]
       }, {
         title: '网络',

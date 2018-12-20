@@ -250,8 +250,8 @@ span的font-size是50px，也就是“高度大于50px”这几个字的高度�
 
 块级元素定宽定高，实现水平/垂直居中：
 
-1. margin: auto
-2. absolute, 负margin
+1. absolute，margin: auto
+2. absolute，top:50%,，left:50%，负margin
 
 块级元素不定宽，实现水平/垂直居中：：
 

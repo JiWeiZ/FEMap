@@ -5,19 +5,12 @@
 ### 浮动元素
 
 1. 元素浮动时，行级元素会环绕该浮动元素
-
 2. 浮动元素脱离正常流，遇到其包含块padding或其他浮动元素时停止。
-
 3. 浮动元素不能比之前的所有浮动元素或块级元素高
-
 4. 浮动元素的宽度会自动收缩
-
 5. 浮动元素的margin不会和父元素的margin合并
-
 6. 浮动元素会生成一个块级框
-
 7. 浮动元素之间不会重叠，有可能重叠时都会换行
-
    假如同一行有2个浮动元素，一个是左浮动，一个是右浮动，如果右浮动元素太宽，则会出现自动换行。那具体哪一个元素换行呢？答：后出现的元素换行
 
    ```html
@@ -39,7 +32,6 @@
        <span style="float:right;margin:5px 0;height:20px;width:150px;background-color:#ddd;">float:right</span>
        <span style="float:left;margin:5px 0;height:20px;width:150px;background-color:#ddd;">float:left</span>
    </div>
-
 8. 浮动元素和正常元素相邻：
 
    ```html
@@ -64,12 +56,9 @@
        <img src="../.vuepress/public/assets/1545283747813.png" style="float:left">
        <p style="overflow:hidden;padding:0 40px;">天山是世界七大山系之一，位于欧亚大陆腹地，东西横跨中国、哈萨克斯坦、吉尔吉斯斯坦和乌兹别克斯坦四国，全长约2500千米，南北平均宽250—350千米，最宽处达800千米以上，是世界上最大的独立纬向山系，也是世界上距离海洋最远的山系和全球干旱地区最大的山系。</p>
    </div>
-
 9. 浮动元素和正常流元素重叠：
-
    1. 与行级元素重叠：边框、背景、内容都位于浮动元素之上
    2. 与块级元素重叠：边框、背景位于浮动元素之下，而内容在浮动元素之上
-
    ```html
    <div style="overflow:hidden;margin: 20px 0">
        <img src="../.vuepress/public/assets/1545279601489.png" alt="" style="float: left;margin-right: -100px">
@@ -113,7 +102,7 @@
 
 #### 如何清除浮动？
 
-1. 使用after伪元素，这个实际上是闭合浮动。但是其实叫什么无所谓了
+1. 使用after伪元素
 
 ```css
 .clearfix::after {
@@ -124,7 +113,7 @@
 }
 ```
 
-2. 给父元素设置成BFC
+2. 给父元素设置成BFC，这个实际上是闭合浮动。但是其实叫什么无所谓了
 
 ```html
 <div class="wrapper" style="overflow:hidden">
