@@ -67,8 +67,7 @@ module.exports = {
         title: '一些题目',
         collapsable: false,
         children: [
-          'Questions/UI',
-          'Questions/questions',
+          'Questions/questions'
         ]
       } , {
         title: '算法/数据结构',
