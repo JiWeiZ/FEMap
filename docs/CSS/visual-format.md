@@ -315,65 +315,60 @@ span的font-size是50px，也就是“高度大于50px”这几个字的高度�
 ```html
 <div style="
             display:table-cell;
-            height: 150px;
-            width: 300px;
+            height: 300px;
+            width: 100%;
             background: gray;
             vertical-align:middle;">
   <span>
-      Hello<br/>
-      World<br/>
-      GoodLuck
+话说天下大势，分久必合，合久必分。周末七国分争，并入于秦。及秦灭之后，楚、汉分争，又并入于汉。汉朝自高祖斩白蛇而起义，一统天下，后来光武中兴，传至献帝，遂分为三国。推其致乱之由，殆始于桓、灵二帝。桓帝禁锢善类，崇信宦官。及桓帝崩，灵帝即位，大将军窦武、太傅陈蕃共相辅佐。时有宦官曹节等弄权，窦武、陈蕃谋诛之，机事不密，反为所害，中涓自此愈横。
   </span>
 </div>
 ```
 
 <div style="
             display:table-cell;
-            height: 150px;
-            width: 300px;
+            height: 300px;
+            width: 100%;
             background: gray;
             vertical-align:middle;">
   <span>
-      Hello<br/>
-      World<br/>
-      GoodLuck
+话说天下大势，分久必合，合久必分。周末七国分争，并入于秦。及秦灭之后，楚、汉分争，又并入于汉。汉朝自高祖斩白蛇而起义，一统天下，后来光武中兴，传至献帝，遂分为三国。推其致乱之由，殆始于桓、灵二帝。桓帝禁锢善类，崇信宦官。及桓帝崩，灵帝即位，大将军窦武、太傅陈蕃共相辅佐。时有宦官曹节等弄权，窦武、陈蕃谋诛之，机事不密，反为所害，中涓自此愈横。
   </span>
 </div>
+
+
 
 
 2. 使用行高
 
 ```html
 <div style="
-            line-height: 150px;
             background: gray;
-            font-size:0;
+            line-height: 300px;
             ">
     <span style="
                  display: inline-block;
-                 font-size: 15px;
                  vertical-align: middle;
                  line-height: 1.4em;
                  ">
-		这里是高度为150像素的标签内的多行文字，文字大小为15像素。<br/>
-		这里是第二行，用来测试多行的显示效果。
+话说天下大势，分久必合，合久必分。周末七国分争，并入于秦。及秦灭之后，楚、汉分争，又并入于汉。汉朝自高祖斩白蛇而起义，一统天下，后来光武中兴，传至献帝，遂分为三国。推其致乱之由，殆始于桓、灵二帝。桓帝禁锢善类，崇信宦官。及桓帝崩，灵帝即位，大将军窦武、太傅陈蕃共相辅佐。时有宦官曹节等弄权，窦武、陈蕃谋诛之，机事不密，反为所害，中涓自此愈横。
 	</span>
 </div>
 ```
 
 <div style="
             background: gray;
-            line-height: 150px;
+            line-height: 300px;
             ">
     <span style="
                  display: inline-block;
                  vertical-align: middle;
                  line-height: 1.4em;
                  ">
-		这里是高度为150像素的标签内的多行文字，文字大小为15像素。<br/>
-		这里是第二行，用来测试多行的显示效果。
+话说天下大势，分久必合，合久必分。周末七国分争，并入于秦。及秦灭之后，楚、汉分争，又并入于汉。汉朝自高祖斩白蛇而起义，一统天下，后来光武中兴，传至献帝，遂分为三国。推其致乱之由，殆始于桓、灵二帝。桓帝禁锢善类，崇信宦官。及桓帝崩，灵帝即位，大将军窦武、太傅陈蕃共相辅佐。时有宦官曹节等弄权，窦武、陈蕃谋诛之，机事不密，反为所害，中涓自此愈横。
 	</span>
 </div>
+
 
 
 
@@ -411,18 +406,33 @@ test1 `div`有文字大小，但行高为`0`，结果`div`的高度就是个`0`�
 
 行高有一个特性叫做垂直居中性。`line-height`的最终表现是通过`line boxes`实现的，而无论`line boxes`所占据的高度是多少（无论比文字大还是比文字小），其占据的空间都是与文字内容公用水平中垂线的。
 
-3. inline-block 元素
+### inline-block垂直居中
 
-inline-block元素可以设置宽高，同时又可以使用vertical-align: middle
+inline-block的行为好复杂，我没太搞懂，暂且把代码贴一下
 
-<iframe width="100%" height="200" src="//jsfiddle.net/happysir/Lv27tow1/9/embedded/html,css,result/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+要点：
+
+1. 比如说inline-block元素的宽高是30px，希望其居中时距离外层div上下10px，就要将外层div的line-height设置为50px
+2. 外层div的font-size必须为0
+3. inline-block元素设置vertical-align: middle
+4. 外层div之所以不占据整行是因为position: absolute具有收缩性
+
+<iframe width="100%" height="300" src="//jsfiddle.net/happysir/Lv27tow1/27/embedded/html,css,result/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
 
 ## 属性值与百分数
 
 计算 width, left, right, padding, margin：这些属性基于包含块的 width 属性值来计算它的百分值。
 
-特别强调padding-top/padding-bottom/margin-top/margin-bottom百分数是相对于包含块的width的
+计算 height top 及 bottom ：基于包含块的 height 的值。
 
-计算 height top 及 bottom 中的百分值：通过包含块的 height 的值。
-**如果包含块的 height 值会根据它的内容变化，而且包含块的 position 属性的值被赋予 relative 或 static ，那么，这些值的计算值为 0。**
+<span style="background:yellow">**特别强调**：</span>
+
+- padding-top
+- padding-bottom
+- margin-top
+- margin-bottom
+
+的百分数是相对于<span style="background:yellow">包含块的width</span>的
+
+
 
