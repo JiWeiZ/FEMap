@@ -4,7 +4,7 @@
 
 读取本地一个叫“testDir”的文件夹，判断是不是文件夹，如果是文件夹就读取里面的所有文件，在这些文件中有一个叫"github"的，里面存的是github的一个json的url地址，然后读取这个json文件的内容。
 
-[代码地址]()
+[代码地址](https://github.com/JiWeiZ/FEMap/tree/master/codes/async)
 
 ## 回调
 
@@ -62,6 +62,12 @@ fs.stat(dirPath, (err, stats) => {
 })
 
 ```
+
+呵，回调地狱
+
+![1545382339477](../.vuepress/public/assets/1545382339477.png)
+
+![1545382409430](../.vuepress/public/assets/1545382409430.png)
 
 ## Promise
 
@@ -151,6 +157,144 @@ stat(dirPath)
   })
 
 ```
+
+### 顺序执行Promise
+
+```js
+const path = require('path')
+const fs = require('fs')
+const { readDir } = require('./promisify')
+const { targetPath } = require('./config')
+let dirPath = path.join(__dirname, targetPath)
+
+function promisify_read(fn) {
+  return function (args) {
+    return new Promise((resolve, reject) =>
+      fn(args, (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          setTimeout(() => resolve(data), 3000)
+        }
+      })
+    )
+  }
+}
+
+let readFile = promisify_read(fs.readFile)
+
+// Promise.all()：并行执行
+readDir(dirPath)
+  .then(files => {
+    console.log(files)
+    let tasks = files.map(file => readFile(path.join(dirPath, file)))
+    Promise.all(tasks).then(data => data.forEach(data => console.log(`file内容：${data.toString()}时间戳：${Date.now()}`)))
+  })
+```
+
+所谓顺序执行就是前一个执行完了再执行后一个，不断使用then就可以：
+
+```js
+readDir(dirPath)
+    .then(files => {
+    console.log(files)
+    Promise.resolve()
+        .then(() => readFile(path.join(dirPath, files[0])))
+        .then(data => console.log(`file内容：${data.toString()}时间戳：${Date.now()}`))
+        .then(() => readFile(path.join(dirPath, files[1])))
+        .then(data => console.log(`file内容：${data.toString()}时间戳：${Date.now()}`))
+        .then(() => readFile(path.join(dirPath, files[2])))
+        .then(data => console.log(`file内容：${data.toString()}时间戳：${Date.now()}`))
+        .then(() => readFile(path.join(dirPath, files[3])))
+        .then(data => console.log(`file内容：${data.toString()}时间戳：${Date.now()}`))
+})
+```
+
+上面那样写了很多then让人不爽，所以我们可以使用循环简化一下。为了说清楚循环的机制我们先手写一下循环的过程：
+
+```js
+readDir(dirPath)
+    .then(files => {
+    console.log(files)
+    let tasks = files.map(file => readFile.bind(null, path.join(dirPath, file)))
+    Promise.resolve()
+        .then(tasks[0])
+        .then(data => console.log(`file内容：${data.toString()}时间戳：${Date.now()}`))
+        .then(tasks[1])
+        .then(data => console.log(`file内容：${data.toString()}时间戳：${Date.now()}`))
+        .then(tasks[2])
+        .then(data => console.log(`file内容：${data.toString()}时间戳：${Date.now()}`))
+        .then(tasks[3])
+        .then(data => console.log(`file内容：${data.toString()}时间戳：${Date.now()}`))
+})
+```
+
+注意这里的tasks，不能写成
+
+```js
+let tasks = files.map(file => readFile（path.join(dirPath, file)))
+```
+
+这么写的话tasks是一个状态全部都是pending的promise，readFile已经被调用了；tasks应该是一个函数集合，等到前一个readFile执行完以后后一个readFile才被执行。所以要bind一下。
+
+然后用reduce完成循环就可以了：
+
+```js
+// 以下方法串行执行
+readDir(dirPath)
+    .then(files => {
+    console.log(files)
+    let tasks = files.map(file => readFile.bind(null, path.join(dirPath, file)))
+    tasks.reduce((p, c) =>
+                 p
+                 .then(c)
+                 .then(data => console.log(`file内容：${data.toString()}时间戳：${Date.now()}`))
+                 , Promise.resolve())
+})
+```
+
+最后可以给顺序执行的部分封装成一个函数，贴一下完整代码：
+
+```js
+// promise_serial_execution.js
+
+const path = require('path')
+const fs = require('fs')
+const { readDir } = require('./promisify')
+const { targetPath } = require('./config')
+let dirPath = path.join(__dirname, targetPath)
+
+function promisify_read(fn) {
+  return function (args) {
+    return new Promise((resolve, reject) =>
+      fn(args, (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          setTimeout(() => resolve(data), 3000)
+        }
+      })
+    )
+  }
+}
+
+let readFile = promisify_read(fs.readFile)
+
+function PromiseSerial(tasks, fn) {
+  tasks.reduce((p, c) => p.then(c).then(data => fn(data)), Promise.resolve())
+}
+
+// 以下方法串行执行
+readDir(dirPath)
+  .then(files => {
+    console.log(files)
+    let tasks = files.map(file => readFile.bind(null, path.join(dirPath, file)))
+    PromiseSerial(tasks, data =>
+      console.log(`file内容：${data.toString()}时间戳：${Date.now()}`))
+  })
+```
+
+
 
 ## async/await
 
