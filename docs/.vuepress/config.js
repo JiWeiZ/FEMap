@@ -39,6 +39,9 @@ module.exports = {
           'JS/byhand',
           'JS/repaint-reflow',
           'JS/recursive',
+          'JS/GC',
+          'JS/async-solution',
+          'JS/design-patterns',
         ]
       }, {
         title: 'CSS',

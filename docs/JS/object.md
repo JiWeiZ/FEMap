@@ -1,5 +1,9 @@
 # 对象相关
 
+## typeof和instanceof
+
+typeof只显示6个值，显示结果是字符串："undefined", "boolean", "string", "number", "object", "function"
+
 ## 对象继承
 
 ### 一切都是对象
@@ -273,33 +277,46 @@ let obj = Object.create(null)    // obj没有原型对象
 
 ### 1. 递归
 
-停止递归的条件：该属性不是对象
+停止递归的条件：① 该属性是函数 ② 该属性是基本类型（暂且认为不是对象就是基本类型）
 
 ```js
-function deepClone (obj) {
-    if (!obj || typeof obj !== 'object') return obj
+  function deepClone(obj) {
+    if (typeof obj === 'function') {
+      return function (...args) {
+        return obj.apply(this, args)
+      }
+    } else if (!obj || typeof obj !== 'object') {
+      return obj
+    }
     let _obj = new obj.constructor()
     Object.keys(obj).forEach(key => _obj[key] = deepClone(obj[key]))
     return _obj
-}
+  }
 ```
 
 测试：
 
 ```js
-function People(contry, hobby, age) {
-  this.contry = contry
-  this.hobby = ['music', 'sports', 'reading']
-  this.age = age
-}
+  function People(contry, name, age) {
+    this.contry = contry
+    this.name = name
+    this.hobby = ['music', 'sports', 'reading']
+    this.age = age
+  }
 
-People.prototype.sayContry = () => { console.log(`I'm from ${this.contry}`) }
+  People.prototype.sayContry = () => { console.log(`I'm from ${this.contry}`) }
 
-var father = new People('China', 'old John', 50)
-var son = new People('China', 'little John', 30)
-var wife = new People('US', 'Cristina', 30)
-father.son = son
-son.wife = wife
+  var father = new People('China', 'old John', 50)
+  father.sayName = function () {
+    console.log(`my name is ${this.name}`)
+  }
+  var son = new People('China', 'little John', 30)
+  var wife = new People('US', 'Cristina', 30)
+  father.son = son
+  son.wife = wife
+
+  var f1 = deepClone(father)
+  console.log(f1.sayName === father.sayName)
 ```
 
 ### 2. JSON序列化
