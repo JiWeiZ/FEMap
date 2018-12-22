@@ -7,8 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
-    "deploy": "bash deploy.sh",
-    "pre": "node test.js"
+    "deploy": "bash deploy.sh"
   },
   "repository": {
     "type": "git",
@@ -22,7 +21,6 @@
   "homepage": "https://github.com/JiWeiZ/FEMap#readme",
   "devDependencies": {
     "handlebars": "^4.0.12",
-    "pre-commit": "^1.2.2",
     "vuepress": "^0.14.8"
   },
   "dependencies": {}
