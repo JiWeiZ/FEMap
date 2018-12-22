@@ -4,7 +4,7 @@
 
 JS执行环境会负责管理代码执行过程中使用的内存。 垃圾收集器会周期性的找出那些不在继续使用的变量，然后释放其内存。 这个过程不是实时的而是周期性的。
 
-**垃圾收集策略，GC，garbage collection）**有2种：标记清除和引用计数
+**垃圾收集策略，GC，garbage collection**有2种：标记清除和引用计数
 
 #### 标记清除
 
@@ -24,7 +24,7 @@ JS执行环境会负责管理代码执行过程中使用的内存。 垃圾收�
 
 IE中有一部分对象并不是原生js对象。例如，其DOM和BOM中的对象就是使用C++以COM（Component Object Model，组件对象模型）对象的形式实现的，而COM对象的垃圾回收机制采用的就是引用计数策略。因此，即使IE的js引擎采用标记清除策略来实现，但js访问的COM对象依然是基于引用计数策略的。
 
-```
+```javascript
 var element = document.getElementById("some_element");
 var myObject = new Object();
 element.o = myObject;

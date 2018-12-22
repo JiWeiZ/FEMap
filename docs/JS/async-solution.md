@@ -1,6 +1,6 @@
 # 异步解决方案
 
-为了演示异步的解决方法，我们进行下面一系列异步操作：
+分别用回调、promise和async操作一波：
 
 读取本地一个叫“testDir”的文件夹，判断是不是文件夹，如果是文件夹就读取里面的所有文件，在这些文件中有一个叫"github"的，里面存的是github的一个json的url地址，然后读取这个json文件的内容。
 
@@ -160,6 +160,10 @@ stat(dirPath)
 
 ### 顺序执行Promise
 
+[代码地址](https://github.com/JiWeiZ/FEMap/blob/master/codes/async/promise_serial_execution.js)
+
+我们知道Promise.all()执行promise是并行执行的，下面的代码读取testDir文件夹下的所有文件，并打印其内容。通过时间戳可以验证Promise.all()确实是并行执行的：
+
 ```js
 const path = require('path')
 const fs = require('fs')
@@ -188,11 +192,13 @@ readDir(dirPath)
   .then(files => {
     console.log(files)
     let tasks = files.map(file => readFile(path.join(dirPath, file)))
-    Promise.all(tasks).then(data => data.forEach(data => console.log(`file内容：${data.toString()}时间戳：${Date.now()}`)))
+    Promise.all(tasks)
+      .then(data => 
+        data.forEach(data => console.log(`file内容：${data.toString()}时间戳：${Date.now()}`)))
   })
 ```
 
-所谓顺序执行就是前一个执行完了再执行后一个，不断使用then就可以：
+如果我想顺序执行promise，或者说串行执行，应该怎么办呢？我们还是利用前面的那个testDir，读取该文件夹下的所有文件，间隔3s依次打印文件内容。其实很简单，只要不断使用then就可以：
 
 ```js
 readDir(dirPath)
@@ -246,10 +252,10 @@ readDir(dirPath)
     console.log(files)
     let tasks = files.map(file => readFile.bind(null, path.join(dirPath, file)))
     tasks.reduce((p, c) =>
-                 p
-                 .then(c)
-                 .then(data => console.log(`file内容：${data.toString()}时间戳：${Date.now()}`))
-                 , Promise.resolve())
+	  p
+      .then(c)
+      .then(data => console.log(`file内容：${data.toString()}时间戳：${Date.now()}`))
+      , Promise.resolve())
 })
 ```
 
@@ -293,8 +299,6 @@ readDir(dirPath)
       console.log(`file内容：${data.toString()}时间戳：${Date.now()}`))
   })
 ```
-
-
 
 ## async/await
 
