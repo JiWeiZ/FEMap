@@ -10,9 +10,6 @@
     "deploy": "bash deploy.sh",
     "pre": "node test.js"
   },
-  "pre-commit": [
-    "deploy"
-  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/JiWeiZ/FEMap.git"
