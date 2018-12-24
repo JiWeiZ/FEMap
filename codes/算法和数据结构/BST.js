@@ -11,15 +11,17 @@ class BST {
     this.root = null
   }
   insert(value) {
-    function insertNode(node, newNode) {
-      if (newNode.value < node.value) {
-        node.left === null ? node.left = newNode : insertNode(node.left, newNode)
+    function insertNode(node, value) {
+      if (node === null) {
+        node = new Node(value)
+      } else if (value < node.value) {
+        node.left = insertNode(node.left, value)
       } else {
-        node.right === null ? node.right = newNode : insertNode(node.right, newNode)
+        node.right = insertNode(node.right, value)
       }
+      return node
     }
-    const newNode = new Node(value)
-    this.root === null ? this.root = newNode : insertNode(this.root, newNode)
+    this.root = insertNode(this.root, value)
   }
   inOrderTraverse(callback) {
     function inOrderTraverseNode(node, callback) {
@@ -135,31 +137,13 @@ class BST {
 }
 
 var tree = new BST()
-var arr = [7, 15, 5, 3, 9, 8, 10, 13, 12, 14, 20, 18, 25, 6]
+var arr = [11, 7, 15, 5, 3, 9, 8, 10, 13, 12, 14, 20, 18, 25, 6]
 arr.forEach(e => tree.insert(e))
 var inOrder = [], preOrder = [], postOrder = []
 function test(arr, value) {
   arr.push(value)
 }
-tree.inOrderTraverse(test.bind(null, inOrder))
-// tree.preOrderTraverse(test.bind(null, preOrder))
-// tree.postOrderTraverse(test.bind(null, postOrder))
-
-console.log(inOrder)
-// [3, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 18, 20, 25]
-// console.log(preOrder)
-// [7, 5, 3, 6, 15, 9, 8, 10, 13, 12, 14, 20, 18, 25]
-// console.log(postOrder)
-// [3, 6, 5, 8, 12, 14, 13, 10, 9, 18, 25, 20, 15, 7]
-// console.log(tree.min())
-// 3
-// console.log(tree.max())
-// 25
-// console.log(tree.search(14))
-// true
-// console.log(tree.search(114))
-// false
+tree.inOrderTraverse(e => console.log(e))
+// 输出 3 5 6 7 8 9 10 11 12 13 14 15 18 20 25
 tree.remove(12)
-inOrder = []
-tree.inOrderTraverse(test.bind(null, inOrder))
-console.log(inOrder)
+tree.inOrderTraverse(e => console.log(e))
