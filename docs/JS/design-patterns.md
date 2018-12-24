@@ -28,3 +28,11 @@
   }
 ```
 
+另外要注意
+
+```js
+textarea.addEventListener('scroll', monopoly(deepCloneFn(pubScroll)))
+preview.addEventListener('scroll', monopoly(deepCloneFn(pubScroll)))
+```
+
+这里用到一个高阶函数monopoly（阻止其他函数调用），还有一点就是事件处理函数要深拷贝一下

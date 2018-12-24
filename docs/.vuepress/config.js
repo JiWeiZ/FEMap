@@ -76,7 +76,7 @@ module.exports = {
         title: '算法/数据结构',
         collapsable: false,
         children: [
-          '',
+          'Algorithm/BST',
         ]
       } , {
         title: '工程化',
