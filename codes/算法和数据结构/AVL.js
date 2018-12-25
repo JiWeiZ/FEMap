@@ -85,7 +85,6 @@ function removeNode(node, value) {
     }
   } else { //do balancing
     node = balance(node)
-
   }
   return node
 }

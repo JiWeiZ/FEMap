@@ -54,7 +54,7 @@ function testAVL1() {
 // }
 
 // testBST()
-testAVL()
+// testAVL()
 
 // function single() {
 //   var arr = [29, 42, 27, 93, 82, 64, 78, 52, 14, 20, 39]
@@ -66,8 +66,8 @@ testAVL()
 //   avl.postOrderTraverse(e => arr1.push(e))
 //   console.log(arr1)
 // }
-// single()
-// var arr = [29, 42, 27, 93, 82, 64, 78, 52, 14, 20, 39]
-// var avl = new AVL()
-// arr.forEach(e => avl.insert(e))
-// avl.remove(27)
+single()
+var arr = [29, 42, 27, 93, 82, 64, 78, 52, 14, 20, 39]
+var avl = new AVL()
+arr.forEach(e => avl.insert(e))
+avl.remove(27)
