@@ -20,7 +20,7 @@ function testBST() {
 }
 
 function testAVL() {
-  try {
+  // try {
     var testArr = Array.from({ length: 10000 }, () =>
       Array.from({ length: 100 }, () => Math.floor(Math.random() * 100))
     )
@@ -30,10 +30,10 @@ function testAVL() {
       return avl
     })
     avlArr.forEach(avl => avl.remove(avl.root.value))
-  } catch (e) {
-    console.log(e)
-    return
-  }
+  // } catch (e) {
+  //   console.log(e)
+  //   return
+  // }
   console.log('pass')
 }
 

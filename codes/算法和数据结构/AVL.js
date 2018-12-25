@@ -37,31 +37,17 @@ function rotationRL(node) {
 }
 
 function balance(node) {
-  if (balanceFactor(node) === -2) {
-    node =  balanceFactor(node.right) === -1 ? rotationRR(node) : rotationRL(node)
-  } else if (balanceFactor(node) === 2) {
-    node = balanceFactor(node.right) === 1 ? rotationLL(node) : rotationLR(node)
+  if (balanceFactor(node) === -2 && balanceFactor(node.right) === -1) {
+    node = rotationRR(node)
+  } else if (balanceFactor(node) === -2 && balanceFactor(node.right) === 1) {
+    node = rotationRL(node)
+  } else if (balanceFactor(node) === 2 && balanceFactor(node.left) === 1) {
+    node = rotationLL(node)
+  } else if (balanceFactor(node) === 2 && balanceFactor(node.left) === -1) {
+    node = rotationLR(node)
   }
   return node
 }
-
-// function balance(node, value) {
-//   if (balanceFactor(node) < -1) {
-//     node = value < node.left.value ? rotationLL(node) : rotationLR(node)
-//   } else if (balanceFactor(node) > 1) {
-//     node = value > node.right.value ? rotationRR(node) : rotationRL(node)
-//   }
-//   return node
-// }
-
-// function balance(node, value) {
-//   if (balanceFactor(node) < -1) {
-//     node = value < node.left.value ? rotationLR(node) : rotationLL(node)
-//   } else if (balanceFactor(node) > 1) {
-//     node = value > node.right.value ? rotationRL(node) : rotationRR(node)
-//   }
-//   return node
-// }
 
 function insertNode(node, value) {
   if (node === null) {
@@ -93,7 +79,6 @@ function removeNode(node, value) {
       if (nodeToBeDeleted === node) {
         node = node.left
       } else {
-        // [nodeToBeDeleted.value, replacer.value] = [replacer.value, nodeToBeDeleted.value]
         nodeToBeDeleted.value = node.value
         node = node.right
       }
@@ -101,39 +86,20 @@ function removeNode(node, value) {
   } else { //do balancing
     node = balance(node)
 
-    // if (node.left === undefined) node.left = null
-    // if (node.right === undefined) node.right = null
-
-    // if ((height(node.left) - height(node.right)) === 2) {
-    //     if (value < node.left.value) {
-    //         node = rotationLR(node)
-    //     } else {
-    //         node = rotationLL(node)
-    //     }
-    // }
-
-    // if ((height(node.right) - height(node.left)) === 2) {
-    //     if (value > node.right.value) {
-    //         node = rotationRL(node)
-    //     } else {
-    //         node = rotationRR(node)
-    //     }
-    // }
-
   }
   return node
 }
 
 class AVL extends BST {
-  constructor () {
+  constructor() {
     super()
   }
 
-  insert (value) {
+  insert(value) {
     this.root = insertNode(this.root, value)
   }
 
-  remove (value) {
+  remove(value) {
     this.root = removeNode(this.root, value)
   }
 }
