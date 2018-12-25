@@ -77,7 +77,8 @@ class Light {
         this.times = data.map(e => e.time)
         this.order = order
         this._currentState = undefined
-        this.container.innerHTML = this.colors.map(e => `<div class="light"></div>`).join('')
+        this.container.innerHTML = 
+          this.colors.map(e => `<div class="light"></div>`).join('')
         this.lights = Array.from(this.container.querySelectorAll('.light'))
     }
     wait(time) {
@@ -88,9 +89,13 @@ class Light {
             this._currentState = 0
         } else {
             if (this.order > 0) {
-                this._currentState = this._currentState < this.colors.length - 1 ? this._currentState + 1 : 0
+                this._currentState = 
+                  this._currentState < this.colors.length - 1 ? 
+                  this._currentState + 1 : 0
             } else if (this.order < 0) {
-                this._currentState = this._currentState ? this._currentState - 1 : this.colors.length - 1
+                this._currentState = 
+                  this._currentState ? 
+                  this._currentState - 1 : this.colors.length - 1
             }
         }
     }
