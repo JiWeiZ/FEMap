@@ -60,42 +60,60 @@ class BST {
 
 下面逐步实现这8个方法
 
-## 插入
-
-插入节点毫无疑问首先必须实例化一个Node类。
-
-如果当前的树是空的，即root === null，那么直接给root赋值就行；
-
-如果当前树不是空的，就需要找到插入新节点的位置。这里我们使用一个递归函数insertNode来解决问题
-
 ```js
-function insertNode (node, newNode) {
-    if (newNode.key < node.key) {
-        node.left === null ? node.left = newNode : insertNode(node.left, newNode)
-    } else {
-        node.right === null ? node.right = newNode : inserNode(node.right, newNode)
-    }
+class BST {
+  constructor() {
+    this.root = null
+  }
+
+  insert(value) {
+    this.root = insertNode(this.root, value)
+  }
+
+  inOrderTraverse(callback) {
+    inOrderTraverseNode(this.root, callback)
+  }
+
+  preOrderTraverse(callback) {
+    preOrderTraverseNode(this.root, callback)
+  }
+
+  postOrderTraverse(callback) {
+    postOrderTraverseNode(this.root, callback)
+  }
+
+  min() {
+    return minNode(this.root)
+  }
+
+  max() {
+    return maxNode(this.root)
+  }
+
+  search(value) {
+    return searchNode(this.root, value)
+  }
+
+  remove(value) {
+    this.root = removeNode(this.root, value)
+  }
 }
 ```
 
-insert方法如下：
+## 插入
+
+我们用一个递归函数insertNode解决问题，递归停止的条件是当前节点是空的；如果新插入的值比node的值小就在其左子树递归，否则在右子树递归
 
 ```js
-class BST {
-  constructor () {
-    this.root = null
+function insertNode(node, value) {
+  if (node === null) {
+    node = new Node(value)
+  } else if (value < node.value) {
+    node.left = insertNode(node.left, value)
+  } else {
+    node.right = insertNode(node.right, value)
   }
-  insert (value) {
-    function insertNode (node, newNode) {
-      if (newNode.value < node.value) {
-        node.left === null ? node.left = newNode : insertNode(node.left, newNode)
-      } else {
-        node.right === null ? node.right = newNode : insertNode(node.right, newNode)
-      }
-    }
-    const newNode = new Node(value)
-    this.root === null ? this.root = newNode : insertNode(this.root, newNode)
-  }
+  return node
 }
 ```
 
@@ -109,27 +127,23 @@ class BST {
 
 ```js
 var tree = new BST()
-var arr = [7, 15, 5, 3, 9, 8, 10, 13, 12, 14, 20, 18, 25, 6]
+var arr = [11，7, 15, 5, 3, 9, 8, 10, 13, 12, 14, 20, 18, 25, 6]
 arr.forEach(e => tree.insert(e))
 ```
 
 ### 中序遍历
 
 ```js
-inOrderTraverse (callback) {
-  function inOrderTraverseNode (node, callback) {
-    if (node !== null) {
-      inOrderTraverseNode(node.left, callback)
-      callback(node.value)
-      inOrderTraverseNode(node.right, callback)
-    }
+function inOrderTraverseNode(node, callback) {
+  if (node !== null) {
+    inOrderTraverseNode(node.left, callback)
+    callback(node.value)
+    inOrderTraverseNode(node.right, callback)
   }
-  inOrderTraverseNode(this.root, callback)
 }
-
 ```
 
-中序遍历之
+中序遍历BST：
 
 ```js
 tree.inOrderTraverse(e => console.log(e))
@@ -141,19 +155,16 @@ tree.inOrderTraverse(e => console.log(e))
 ### 先序遍历
 
 ```js
-preOrderTraverse(callback) {
-  function preOrderTraverseNode(node, callback) {
-    if (node !== null) {
-      callback(node.value)
-      preOrderTraverseNode(node.left, callback)
-      preOrderTraverseNode(node.right, callback)
-    }
+function preOrderTraverseNode(node, callback) {
+  if (node !== null) {
+    callback(node.value)
+    preOrderTraverseNode(node.left, callback)
+    preOrderTraverseNode(node.right, callback)
   }
-  preOrderTraverseNode(this.root, callback)
 }
 ```
 
-先序遍历之
+先序遍历BST：
 
 ```js
 tree.preOrderTraverse(e => console.log(e))
@@ -165,19 +176,16 @@ tree.preOrderTraverse(e => console.log(e))
 ### 后序遍历
 
 ```js
-postOrderTraverse(callback) {
-  function postOrderTraverseNode(node, callback) {
-    if (node !== null) {
-      postOrderTraverseNode(node.left, callback)
-      postOrderTraverseNode(node.right, callback)
-      callback(node.value)
-    }
+function postOrderTraverseNode(node, callback) {
+  if (node !== null) {
+    postOrderTraverseNode(node.left, callback)
+    postOrderTraverseNode(node.right, callback)
+    callback(node.value)
   }
-  postOrderTraverseNode(this.root, callback)
 }
 ```
 
-后序遍历之
+后序遍历BST：
 
 ```js
 tree.postOrderTraverse(e => console.log(e))
@@ -190,55 +198,50 @@ tree.postOrderTraverse(e => console.log(e))
 
 ### 最小值
 
+最小值是node最左叶节点的值
+
 ```js
-min () {
-  function minNode (node) {
-    if (node) {
-      while (node && node.left !== null) {
-        node = node.left
-      }
-      return node.value
-    } else {
-      return null
+function minNode(node) {
+  if (node) {
+    while (node && node.left !== null) {
+      node = node.left
     }
+    return node.value
+  } else {
+    return null
   }
-  return minNode(this.root)
 }
 ```
 
 ### 最大值
 
+最大值是node最右叶节点的值
+
 ```js
-max () {
-  function maxNode (node) {
-    if (node) {
-      while (node && node.right !== null) {
-        node = node.right
-      }
-      return node.value
-    } else {
-      return null
+function maxNode(node) {
+  if (node) {
+    while (node && node.right !== null) {
+      node = node.right
     }
+    return node.value
+  } else {
+    return null
   }
-  return maxNode(this.root)
 }
 ```
 
 ## 搜索
 
 ```js
-search (value) {
-  function searchNode (node, value) {
-    if (node === null) return false
-    if (value < node.value) {
-      return searchNode(node.left, value)
-    } else if (value > node.value) {
-      return searchNode(node.right, value)
-    } else {
-      return true
-    }
+function searchNode(node, value) {
+  if (node === null) return false
+  if (value < node.value) {
+    return searchNode(node.left, value)
+  } else if (value > node.value) {
+    return searchNode(node.right, value)
+  } else {
+    return true
   }
-  return searchNode(this.root, value)
 }
 ```
 
@@ -247,111 +250,43 @@ search (value) {
 和前面的方法类似，我们仍然采用递归处理。
 
 ```js
-remove (value) {
-  function removeNode (node, value) {
-    if (node === null) return null
-    if (value < node.value) {
-      node.left = removeNode(node.left, value)
-      return node
-    } else if (value > node.value) {
-      node.right = removeNode(node.right, value)
-      return node
-    } else { // 希望移除的值 等于 当前节点的值
-      // 第1种情况：该节点是叶节点
-      // 第2种情况：该节点有1个孩子
-      // 第3种情况：该节点有2个孩子
-    }
+function removeNode(node, value) {
+  if (node === null) return null
+  if (value < node.value) {
+    node.left = removeNode(node.left, value)
+  } else if (value > node.value) {
+    node.right = removeNode(node.right, value)
+  } else { // 希望移除的值 等于 当前节点的值
+    // 第1种情况：该节点是叶节点
+    // 第2种情况：该节点有1个孩子
+    // 第3种情况：该节点有2个孩子
   }
-  this.root = removeNode(this.root, value)
+  return node
 }
 ```
 
 第1种情况：该节点是叶节点，就直接把叶节点去掉就好了
 
-```js
-if (node.left === null && node.right === null) {
-  node = null
-  return node
-}
-```
-
 第2种情况：该节点有1个孩子，让这个孩子取代该节点即可
-
-```js
-if (node.left === null ^ node.right === null) {
-  if (node.left === null) {
-    node = node.right
-    return node
-  } else {
-    node = node.left
-    return node
-  }
-}
-```
 
 第3种情况：该节点有2个孩子，这需要用该节点右子树最小节点取代之，然后移除右子树最小节点
 
 ```js
-if (node.left !== null && node.right !== null) {
-  function findMinNode(node) {
-    while (node && node.left !== null) {
-      node = node.left
-    }
-    return node
+if (node.left === null && node.right === null) { // 第1种情况：该节点是叶节点
+  node = null
+  return node
+} else if (node.left === null ^ node.right === null) { // 第2种情况：该节点有1个孩子
+  if (node.left === null) {
+    node = node.right
+  } else {
+    node = node.left
   }
-  var replacer = findMinNode(node)
+} else if (node.left !== null && node.right !== null) { // 第3种情况：该节点有2个孩子
+  var replacer = minNode(node)
   node.value = replacer.value
   node.right = removeNode(node.right, replacer.value)
-  return node
 }
 ```
 
-完整的remove方法：
-
-```js
-remove(value) {
-  function removeNode(node, value) {
-    if (node === null) return null
-    if (value < node.value) {
-      node.left = removeNode(node.left, value)
-      return node
-    } else if (value > node.value) {
-      node.right = removeNode(node.right, value)
-      return node
-    } else { // 希望移除的值 等于 当前节点的值
-      // 第1种情况：该节点是叶节点
-      if (node.left === null && node.right === null) {
-        node = null
-        return node
-      }
-      // 第2种情况：该节点有1个孩子
-      if (node.left === null ^ node.right === null) {
-        if (node.left === null) {
-          node = node.right
-          return node
-        } else {
-          node = node.left
-          return node
-        }
-      }
-      // 第3种情况：该节点有2个孩子
-      if (node.left !== null && node.right !== null) {
-        function findMinNode(node) {
-          while (node && node.left !== null) {
-            node = node.left
-          }
-          return node
-        }
-        var replacer = findMinNode(node)
-        node.value = replacer.value
-        node.right = removeNode(node.right, replacer.value)
-        return node
-      }
-    }
-  }
-  this.root = removeNode(this.root, value)
-}
-```
-
-
+[代码地址](https://github.com/JiWeiZ/FEMap/blob/master/codes/%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/BST.js)
 

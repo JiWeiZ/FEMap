@@ -1,5 +1,30 @@
 # 函数和闭包
 
+## function.length
+
+function.length的值要注意2点：
+
+1. 不包括rest参数的个数
+2. 仅包括第一个默认参数之前的形参个数
+
+```javascript
+console.log((function()        {}).length); /* 0 */
+console.log((function(a)       {}).length); /* 1 */
+console.log((function(a, b)    {}).length); /* 2 etc. */
+
+console.log((function(...args) {}).length); 
+// 0, rest parameter is not counted
+
+
+console.log((function(a, b = 1, c) {}).length);
+// 1, only parameters before the first one with 
+// a default value is counted
+
+console.log((function(a = 1, b, c) {}).length) // 0
+console.log((function(b, a = 1, c) {}).length) // 1
+console.log((function(b, c, a = 1) {}).length) // 2
+```
+
 ## this对象
 
 1. 全局函数，this等于window（因为全局函数相当于window的方法）

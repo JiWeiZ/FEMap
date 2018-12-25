@@ -77,6 +77,7 @@ module.exports = {
         collapsable: false,
         children: [
           'Algorithm/BST',
+          'Algorithm/AVL',
         ]
       } , {
         title: '工程化',
