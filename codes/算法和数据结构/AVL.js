@@ -1,9 +1,6 @@
 const Node = require('./Node')
 const BST = require('./BST')
 
-var replacer = null
-var nodeToBeDeleted = null
-
 function height(node) {
   return node === null ? 0 : Math.max(height(node.left), height(node.right)) + 1
 }
@@ -62,31 +59,28 @@ function insertNode(node, value) {
 }
 
 function removeNode(node, value) {
-  if (node === null) {
-    return null
-  }
-  replacer = node
-
+  if (node === null) return null
   if (value < node.value) {
     node.left = removeNode(node.left, value)
-  } else {
-    nodeToBeDeleted = node
+  } else if (value > node.value) {
     node.right = removeNode(node.right, value)
-  }
-
-  if (node === replacer) { //remove node
-    if (nodeToBeDeleted !== null && nodeToBeDeleted.value === value) {
-      if (nodeToBeDeleted === node) {
-        node = node.left
-      } else {
-        nodeToBeDeleted.value = node.value
+  } else { // 希望移除的值 等于 当前节点的值
+    if (node.left === null && node.right === null) { // 第1种情况：该节点是叶节点
+      node = null
+      return node
+    } else if (node.left === null ^ node.right === null) { // 第2种情况：该节点有1个孩子
+      if (node.left === null) {
         node = node.right
+      } else {
+        node = node.left
       }
+    } else if (node.left !== null && node.right !== null) { // 第3种情况：该节点有2个孩子
+      var replacer = minNode(node.right)
+      node.value = replacer.value
+      replacer = replacer.right
     }
-  } else { //do balancing
-    node = balance(node)
   }
-  return node
+  return balance(node)
 }
 
 class AVL extends BST {

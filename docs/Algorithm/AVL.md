@@ -143,12 +143,12 @@ function rotationRL(node) {
 
 如何判断AVL旋转的类型呢？我们考虑一个待平衡的节点，根据破坏树的平衡性（平衡因子的绝对值大于 1）的节点以及其子节点的平衡因子来判断平衡化类型，不难发现实际上有4种类型：
 
-| 待平衡节点的BF | 左子树BF | 右子树高度BF | 类型 |
-| -------------- | -------- | ------------ | ---- |
-| -2             | --       | -1           | RR   |
-| -2             | --       | +1           | RL   |
-| +2             | +1       | --           | LL   |
-| +2             | -1       | --           | LR   |
+| 待平衡节点的BF | 左子树BF | 右子树BF | 类型 |
+| -------------- | -------- | -------- | ---- |
+| -2             | --       | -1       | RR   |
+| -2             | --       | +1       | RL   |
+| +2             | +1       | --       | LL   |
+| +2             | -1       | --       | LR   |
 
 这样自平衡函数就很容易写出来了：
 
@@ -169,39 +169,37 @@ function balance(node) {
 
 ## 移除
 
-移除AVL的节点有点复杂
-
 ```js
-var replacer = null
-var nodeToBeDeleted = null
 function removeNode(node, value) {
-  if (node === null) {
-    return null
-  }
-  replacer = node
-
+  if (node === null) return null
   if (value < node.value) {
     node.left = removeNode(node.left, value)
-  } else {
-    nodeToBeDeleted = node
+  } else if (value > node.value) {
     node.right = removeNode(node.right, value)
-  }
-
-  if (node === replacer) { //remove node
-    if (nodeToBeDeleted !== null && nodeToBeDeleted.value === value) {
-      if (nodeToBeDeleted === node) {
-        node = node.left
-      } else {
-        nodeToBeDeleted.value = node.value
+  } else { // 希望移除的值 等于 当前节点的值
+    if (node.left === null && node.right === null) { // 第1种情况：该节点是叶节点
+      node = null
+      return node
+    } else if (node.left === null ^ node.right === null) { // 第2种情况：该节点有1个孩子
+      if (node.left === null) {
         node = node.right
+      } else {
+        node = node.left
       }
+    } else if (node.left !== null && node.right !== null) { // 第3种情况：该节点有2个孩子
+      var replacer = minNode(node.right)
+      node.value = replacer.value
+      replacer = replacer.right
     }
-  } else { //do balancing
-    node = balance(node)
   }
-  return node
+  return balance(node)
 }
 ```
+
+和BST不同的地方有2点：
+
+1. 总是将右子树最小节点作为replacer
+2. 需要自平衡
 
 [代码地址](https://github.com/JiWeiZ/FEMap/blob/master/codes/%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/AVL.js)
 

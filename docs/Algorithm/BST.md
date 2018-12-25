@@ -83,11 +83,11 @@ class BST {
   }
 
   min() {
-    return minNode(this.root)
+    return minNode(this.root).value
   }
 
   max() {
-    return maxNode(this.root)
+    return maxNode(this.root).value
   }
 
   search(value) {
@@ -137,7 +137,7 @@ arr.forEach(e => tree.insert(e))
 function inOrderTraverseNode(node, callback) {
   if (node !== null) {
     inOrderTraverseNode(node.left, callback)
-    callback(node.value)
+    callback(node)
     inOrderTraverseNode(node.right, callback)
   }
 }
@@ -146,7 +146,7 @@ function inOrderTraverseNode(node, callback) {
 中序遍历BST：
 
 ```js
-tree.inOrderTraverse(e => console.log(e))
+tree.inOrderTraverse(e => console.log(e.value))
 // 输出 3 5 6 7 8 9 10 11 12 13 14 15 18 20 25
 ```
 
@@ -157,7 +157,7 @@ tree.inOrderTraverse(e => console.log(e))
 ```js
 function preOrderTraverseNode(node, callback) {
   if (node !== null) {
-    callback(node.value)
+    callback(node)
     preOrderTraverseNode(node.left, callback)
     preOrderTraverseNode(node.right, callback)
   }
@@ -167,7 +167,7 @@ function preOrderTraverseNode(node, callback) {
 先序遍历BST：
 
 ```js
-tree.preOrderTraverse(e => console.log(e))
+tree.preOrderTraverse(e => console.log(e.value))
 // 输出 11 7 5 3 6 9 8 10 15 13 12 14 20 18 25
 ```
 
@@ -180,7 +180,7 @@ function postOrderTraverseNode(node, callback) {
   if (node !== null) {
     postOrderTraverseNode(node.left, callback)
     postOrderTraverseNode(node.right, callback)
-    callback(node.value)
+    callback(node)
   }
 }
 ```
@@ -188,7 +188,7 @@ function postOrderTraverseNode(node, callback) {
 后序遍历BST：
 
 ```js
-tree.postOrderTraverse(e => console.log(e))
+tree.postOrderTraverse(e => console.log(e.value))
 // 输出 3 6 5 8 10 9 7 12 14 13 18 25 20 15 11 
 ```
 
@@ -196,9 +196,9 @@ tree.postOrderTraverse(e => console.log(e))
 
 ## 最值
 
-### 最小值
+### 最小
 
-最小值是node最左叶节点的值
+最小子节点是该node的最左叶节点
 
 ```js
 function minNode(node) {
@@ -206,16 +206,16 @@ function minNode(node) {
     while (node && node.left !== null) {
       node = node.left
     }
-    return node.value
+    return node
   } else {
     return null
   }
 }
 ```
 
-### 最大值
+### 最大
 
-最大值是node最右叶节点的值
+最大子节点是该node的最右叶节点
 
 ```js
 function maxNode(node) {
@@ -223,7 +223,7 @@ function maxNode(node) {
     while (node && node.right !== null) {
       node = node.right
     }
-    return node.value
+    return node
   } else {
     return null
   }

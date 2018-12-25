@@ -1,5 +1,6 @@
 const BST = require('./BST')
 const AVL = require('./AVL')
+const AVL1 = require('./AVL1')
 
 function testBST() {
   try {
@@ -25,11 +26,14 @@ function testAVL() {
       Array.from({ length: 100 }, () => Math.floor(Math.random() * 100))
     )
     var avlArr = testArr.map(e => {
-      var avl = new AVL()
+      var avl = new AVL1()
       e.forEach(n => avl.insert(n))
       return avl
     })
-    avlArr.forEach(avl => avl.remove(avl.root.value))
+    avlArr.forEach(avl => {
+      avl.remove(avl.root.value)
+      avl.checkBF()
+    })
   // } catch (e) {
   //   console.log(e)
   //   return
@@ -54,7 +58,7 @@ function testAVL1() {
 // }
 
 // testBST()
-// testAVL()
+testAVL()
 
 // function single() {
 //   var arr = [29, 42, 27, 93, 82, 64, 78, 52, 14, 20, 39]
@@ -66,8 +70,8 @@ function testAVL1() {
 //   avl.postOrderTraverse(e => arr1.push(e))
 //   console.log(arr1)
 // }
-single()
-var arr = [29, 42, 27, 93, 82, 64, 78, 52, 14, 20, 39]
-var avl = new AVL()
-arr.forEach(e => avl.insert(e))
-avl.remove(27)
+// single()
+// var arr = [29, 42, 27, 93, 82, 64, 78, 52, 14, 20, 39]
+// var avl = new AVL()
+// arr.forEach(e => avl.insert(e))
+// avl.remove(27)
