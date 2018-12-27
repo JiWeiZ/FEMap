@@ -79,6 +79,8 @@ module.exports = {
           'Algorithm/BST',
           'Algorithm/AVL',
           'Algorithm/sort',
+          'Algorithm/search',
+          'Algorithm/dynamic-program',
         ]
       } , {
         title: '工程化',
