@@ -1,10 +1,3 @@
-# 搜索算法
-
-## 二分搜索
-
-二分搜索要求被搜索的数据结构已排序。
-
-```js
 const quickSort = require('../Sort/quickSort')
 
 function binarySearch (arr, item) {
@@ -26,6 +19,3 @@ function binarySearch (arr, item) {
 
 var arr = [6, 7, 0, 4, 1, 5, 3, 2]
 console.log(binarySearch(arr, 6))
-
-```
-
