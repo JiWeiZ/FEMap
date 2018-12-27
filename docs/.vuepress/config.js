@@ -78,6 +78,7 @@ module.exports = {
         children: [
           'Algorithm/BST',
           'Algorithm/AVL',
+          'Algorithm/sort',
         ]
       } , {
         title: '工程化',
