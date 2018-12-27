@@ -52,13 +52,14 @@ class BST {
 4. 中序遍历inOrderTraverse 
 5. 先序遍历preOrderTraverse 
 6. 后序遍历postOrderTraverse 
+7. 广度优先遍历breadthTraverse
 
 然后还有最值：
 
 7. 最大值max
 8. 最小值min
 
-下面逐步实现这8个方法
+下面逐步实现这9个方法
 
 ```js
 class BST {
@@ -80,6 +81,10 @@ class BST {
 
   postOrderTraverse(callback) {
     postOrderTraverseNode(this.root, callback)
+  }
+
+  breadthTraverse(callback) {
+    breadthTraverseNode(this.root, callback)
   }
 
   min() {
@@ -119,15 +124,19 @@ function insertNode(node, value) {
 
 ## 遍历
 
+遍历分为**深度优先遍历**和**广度优先遍历**，深度优先又分为3中：中序、先序和后序
+
 1. 中序遍历是以节点值从最小到最大的顺序访问所有节点。中序遍历的一种应用就是**对树进行排序操作**。
 2. 先序遍历是以优先于后代节点的顺序访问每个节点的。 先序遍历的一种应用是**打印一个结构化的文档**。
 3. 后序遍历则是先访问节点的后代节点， 再访问节点本身。 后序遍历的一种应用是**计算一个目录和它的子目录中所有文件所占空间的大小**。
+
+广度优先从根结点开始，自上而下逐层遍历；在同一层中，按照从左到右的顺序对结点逐一访问。
 
 我们首先新建一个树，插入一些值
 
 ```js
 var tree = new BST()
-var arr = [11，7, 15, 5, 3, 9, 8, 10, 13, 12, 14, 20, 18, 25, 6]
+var arr = [11, 7, 15, 5, 3, 9, 8, 10, 13, 12, 14, 20, 18, 25, 6]
 arr.forEach(e => tree.insert(e))
 ```
 
@@ -193,6 +202,34 @@ tree.postOrderTraverse(e => console.log(e.value))
 ```
 
 ![1545618067236](../.vuepress/public/assets/1545618067236.png)
+
+### 广度优先遍历
+
+```js
+function breadthTraverseNode(node, callback) {
+  let stack = [node], count = 0
+  function bfs() {
+    let currentNode = stack[count]
+    if (currentNode) {
+      callback(currentNode)
+      if (currentNode.left) stack.push(currentNode.left)
+      if (currentNode.right) stack.push(currentNode.right)
+      count++
+      bfs()
+    }
+  }
+  bfs()
+}
+```
+
+1. 我们将数组`stack`作为栈使用，首先将需要遍历的节点压入栈中，用`count`记录当前执行到第几个节点。
+2. 为了让递归函数能访问`stack`和`count`，我们使用了一个闭包。
+3. 如果当前访问的节点不为空，就执行callback，然后若该节点左子树存在就把左子树压入栈，右子树存在就把右子树压入栈（顺序不可颠倒），自增count数量然后递归即可。
+
+```js
+tree.postOrderTraverse(e => console.log(e.value))
+// 输出 [11, 7, 15, 5, 9, 13, 20, 3, 6, 8, 10, 12, 14, 18, 25]
+```
 
 ## 最值
 

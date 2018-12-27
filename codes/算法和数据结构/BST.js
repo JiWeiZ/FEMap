@@ -60,6 +60,21 @@ function postOrderTraverseNode(node, callback) {
   }
 }
 
+function breadthTraverseNode(node, callback) {
+  let stack = [node], count = 0
+  function bfs() {
+    let currentNode = stack[count]
+    if (currentNode) {
+      callback(currentNode)
+      if (currentNode.left) stack.push(currentNode.left)
+      if (currentNode.right) stack.push(currentNode.right)
+      count++
+      bfs()
+    }
+  }
+  bfs()
+}
+
 function minNode(node) {
   if (node) {
     while (node && node.left !== null) {
@@ -112,6 +127,10 @@ class BST {
 
   postOrderTraverse(callback) {
     postOrderTraverseNode(this.root, callback)
+  }
+
+  breadthTraverse(callback) {
+    breadthTraverseNode(this.root, callback)
   }
 
   min() {

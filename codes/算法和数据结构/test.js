@@ -58,7 +58,7 @@ function testAVL1() {
 // }
 
 // testBST()
-testAVL()
+// testAVL()
 
 // function single() {
 //   var arr = [29, 42, 27, 93, 82, 64, 78, 52, 14, 20, 39]
@@ -75,3 +75,8 @@ testAVL()
 // var avl = new AVL()
 // arr.forEach(e => avl.insert(e))
 // avl.remove(27)
+
+var arr = [29, 42, 27, 93, 82, 64, 78, 52, 14, 20, 39]
+var bst = new BST()
+arr.forEach(e => bst.insert(e))
+bst.breadthTraverse(e => console.log(e.value))
