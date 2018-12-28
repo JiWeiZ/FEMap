@@ -99,103 +99,495 @@ function parseString (data) {
 
 ## 手写Promise
 
-1. Promise构造器接收一个函数参数fn，该函数又拥有2个函数参数resolve和reject
-2. promise的初始状态是pending，可以向resolved和rejected状态转换
-3. promise会将调用成功或失败的值传给then方法，所以需要2个变量value和reason接收成功或失败的值
+先来实现一个简易版的promise，然后实现一个符合[Promises/A+规范](http://www.ituring.com.cn/article/66566)的promise
+
+### 简易版Promise
 
 ```js
-function myPromise (fn) {
-    let self = this
-    self.status = 'pending'
-    self.value = undefined
-    self.reason = undefined
-    function resolve (value) {
-        if (self.status === 'pending') {
-            self.status = 'fulfilled'
-            self.value = value
-        }
-    }
-    function reject (reason) {
-        if (self.status === 'pending') {
-            self.status = 'rejected'
-            self.reason = reason
-        }
-    }
-    fn(resolve, reject)
+const PENDING = 'pending'
+const RESOLVED = 'resolved'
+const REJECTED = 'rejected'
+
+function MyPromise(fn) {
+  const self = this
+  self.state = PENDING
+  self.value = null
+  self.resolvedCallbacks = []
+  self.rejectedCallbacks = []
+  // 待实现resolve
+  // 待实现reject
+  // 待执行fn
+}
+MyPromise.prototype.then = function () {...} // 待实现then
+```
+
+简易版的promise有4个属性和1个方法：
+
+4个属性：
+
+1. 状态：self.state
+2. 值：self.value，用来保存resolve或reject传入的值
+3. 接受回调队列：self.resolvedCallbacks
+4. 拒绝回调队列：self.rejectedCallbacks
+
+1个方法：then
+
+简易版的promise实际上共做了这4件事：
+
+1. 初始化4个属性
+2. 声明resolve和reject
+3. 执行 `Promise` 传入的函数fn
+4. 定义then方法
+
+首先，promise构造函数接受一个函数fn作为参数，并且要求fn必须有2个参数，一个是resolve，一个是reject。resolve和reject功能类似，就是在状态为“等待”时，将promise的状态变为“接受”或“拒绝”，然后将传入的值赋给promise.value，最后依次执行回调队列。
+
+```js
+function resolve (value) {
+  if (self.state === PENDING) {
+    self.state = RESOLVED
+    self.value = value
+    self.resolvedCallbacks.map(cb => cb(self.value))
+  }
+}
+
+function reject (value) {
+  if (self.state === PENDING) {
+    self.state = REJECTED
+    self.value = value
+    self.rejectedCallbacks.map(cb => cb(self.value))
+  }
 }
 ```
 
-下面来写promise的then方法。
-
-4. then方法接收2个函数回调：onFulfilled和onRejected
-5. 在pending的时候，将回调添加到回调队列中；在fulfilled的时候，调用onFulfilled；在rejected的时候，调用onRejected
+执行fn的部分也很简单，由于执行函数过程中可能遇到错误，所以需要捕获错误并且执行 `reject` 函数
 
 ```js
-function myPromise(fn) {
+try {
+  fn(resolve, reject)
+} catch (e) {
+  reject(e)
+}
+```
+
+最后来实现then方法
+
+```js
+MyPromise.prototype.then = function(onFulfilled, onRejected) {
   const self = this
-  self.status = 'pending'
-  self.value = undefined
-  self.reason = undefined
+  onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : v => v
+  onRejected = typeof onRejected === 'function' ? onRejected : r => {throw r}
+
+  if (self.state === PENDING) {
+    self.resolvedCallbacks.push(onFulfilled)
+    self.rejectedCallbacks.push(onRejected)
+  }
+
+  if (self.state === RESOLVED) {
+    onFulfilled(self.value)
+  }
+
+  if (self.state === REJECTED) {
+    onRejected(self.value)
+  }
+}
+```
+
+我们知道then方法接收2个可选参数onFulfilled和onRejected，因为是可选的，所以我们需要给它们赋默认值。then方法在promise的3种状态下执行3种策略：
+
+1. promise状态是pending：将onFulfilled和onRejected分别push到接收回调队列和拒绝回调队列
+2. promise状态是resolved：执行onFulfilled(self.value)
+3. promise状态是rejected：执行onRejected(self.value)
+
+最后贴一下完整的代码
+
+```js
+const PENDING = 'pending'
+const RESOLVED = 'resolved'
+const REJECTED = 'rejected'
+
+function MyPromise(fn) {
+  const self = this
+  self.state = PENDING
+  self.value = null
   self.resolvedCallbacks = []
   self.rejectedCallbacks = []
 
-  self.resolve = value => {
-    if (value instanceof myPromise) {
-      return value.then(self.resolve, self.reject)
+  function resolve (value) {
+    if (self.state === PENDING) {
+      self.state = RESOLVED
+      self.value = value
+      self.resolvedCallbacks.map(cb => cb(self.value))
     }
-    setTimeout(() => {
-      if (self.status === 'pending') {
-        self.status = 'fulfilled'
-        self.value = value
-        self.resolvedCallbacks.forEach(cb => cb())
-      }
-    }, 0)
   }
 
-  self.reject = reason => {
-    setTimeout(() => {
-      if (self.status === 'pending') {
-        self.status = 'rejected'
-        self.reason = reason
-        self.rejectedCallbacks.forEach(cb => cb())
-      }
-    }, 0)
+  function reject (value) {
+    if (self.state === PENDING) {
+      self.state = REJECTED
+      self.value = value
+      self.rejectedCallbacks.map(cb => cb(self.value))
+    }
   }
 
   try {
-    fn(self.resolve, self.reject)
+    fn(resolve, reject)
   } catch (e) {
-    self.reject(e)
+    reject(e)
   }
 }
 
-myPromise.prototype.then = function (onFulfilled, onRejected) {
-  let self = this
-  if (self.status === 'pending') {
-    self.resolvedCallbacks.push(() => onFulfilled(self.value))
-    self.rejectedCallbacks.push(() => onRejected(self.reason))
+MyPromise.prototype.then = function(onFulfilled, onRejected) {
+  const self = this
+  onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : v => v
+  onRejected = typeof onRejected === 'function' ? onRejected : r => throw r
+
+  if (self.state === PENDING) {
+    self.resolvedCallbacks.push(onFulfilled)
+    self.rejectedCallbacks.push(onRejected)
   }
-  if (self.status === 'fulfilled') {
+
+  if (self.state === RESOLVED) {
     onFulfilled(self.value)
   }
-  if (self.status === 'rejected') {
-    onRejected(self.reason)
+
+  if (self.state === REJECTED) {
+    onRejected(self.value)
+  }
+}
+```
+
+### 符合 Promise/A+ 的 Promise
+
+先来改造一下resolve和reject
+
+```js
+function resolve(value) {
+  if (value instanceof MyPromise) {
+    return value.then(resolve, reject)
+  }
+  setTimeout(() => {
+    if (self.state === PENDING) {
+      self.state = RESOLVED
+      self.value = value
+      self.resolvedCallbacks.map(cb => cb(self.value))
+    }
+  })
+}
+function reject(value) {
+  setTimeout(() => {
+    if (self.state === PENDING) {
+      self.state = REJECTED
+      self.value = value
+      self.rejectedCallbacks.map(cb => cb(self.value))
+    }
+  })
+}
+```
+
+1. 如果resolve或reject的是一个promise，就调用这个promise的then方法
+2. 为了保证函数执行顺序，需要将两个函数体代码使用 `setTimeout` 包裹起来，将其放在一个宏任务中
+
+接下来继续改造then。因为每个 `then` 函数都需要返回一个新的 `Promise` 对象，所以我们需要新增一个变量 `promise2`保存新的返回对象。
+
+```js
+MyPromise.prototype.then = function (onResolved, onRejected) {
+  var self = this
+  var promise2 // 规范 2.2.7，then 必须返回一个新的 promise
+  onResolved = typeof onResolved === 'function' ? onResolved : v => v
+  onRejected = typeof onRejected === 'function' ? onRejected : r => throw r
+
+  if (self.currentState === PENDING) {
+  }
+  
+  if (self.currentState === RESOLVED) {
+  }
+
+  if (self.currentState === REJECTED) {
+  }
+};
+```
+
+我们先来改造判断等待态的逻辑
+
+```js
+if (self.state === PENDING) {
+  reutrn (promise2 = new MyPromise((resolve, reject) => {
+    self.resolvedCallbacks.push(() => {
+      try {
+        const x = onFufilled(self.value)
+        resolutionProcedure(promise2, x, resolve, reject)
+      } catch (r) {
+        reject(r)
+      }
+    })
+    
+    self.rejectedCallbacks.push(() => {
+      try {
+        const x = onRejected(self.value)
+        resolutionProcedure(promise2, x, resolve, reject)
+      } catch (r) {
+        reject(r)
+      }
+    })
+  }))
+}
+```
+
+然后我们改造判断执行态的逻辑
+
+```js
+if (self.currentState === RESOLVED) {
+  return (promise2 = new MyPromise((resolve, reject) => {
+    setTimeout(() => { // 规范 2.2.4
+      try {
+        const x = onFufilled(self.value)
+        resolutionProcedure(promise2, x, resolve, reject)
+      } catch (r) {
+        reject(r)
+      }
+    })
+  }))
+}
+if (self.currentState === REJECTED) {
+  return (promise2 = new MyPromise((resolve, reject) => {
+    setTimeout(() => {
+      try {
+        const x = onRejected(self.value)
+        resolutionProcedure(promise2, x, resolve, reject)
+      } catch (r) {
+        reject(r)
+      }
+    })
+  }))
+}
+```
+
+规范 2.2.4：`onFulfilled` 和 `onRejected` 只有在执行环境堆栈仅包含**平台代码**时才可被调用。这里的**平台代码**指的是引擎、环境以及 promise 的实施代码。实践中要确保 `onFulfilled` 和 `onRejected` 方法异步执行，且应该在 `then` 方法被调用的那一轮事件循环之后的新执行栈中执行。这个事件队列可以采用“宏任务（macro-task）”机制或者“微任务（micro-task）”机制来实现。由于 promise 的实施代码本身就是平台代码（**译者注：**即都是 JavaScript），故代码自身在处理在处理程序时可能已经包含一个任务调度队列。
+
+**简单的说，规范 2.2.4就是要求`onFulfilled` 和 `onRejected` 必须异步执行**
+
+最后，当然也是最难的一部分，也就是实现兼容多种 `Promise` 的 `resolutionProcedure` 函数
+
+**Promise 解决过程**是一个抽象的操作，其需输入一个 `promise` 和一个值，我们表示为 `[[Resolve]](promise, x)`，如果 `x` 有 `then` 方法且看上去像一个 Promise ，解决程序即尝试使 `promise` 接受 `x` 的状态；否则其用 `x` 的值来执行 `promise` 。这种 thenable 的特性使得 Promise 的实现更具有通用性：只要其暴露出一个遵循 Promise/A+ 协议的 `then` 方法即可；这同时也使遵循 Promise/A+ 规范的实现可以与那些不太规范但可用的实现能良好共存。
+
+```js
+function resolutionProcedure(promise2, x, resolve, reject) {
+  if (promise2 === x) {
+    return reject(new TypeError('Error'))
+  }
+}
+```
+
+规范规定了 `x` 不能与 `promise2` 相等，这样会发生循环引用的问题，比如如下代码
+
+```js
+let p = new MyPromise((resolve, reject) => {
+  resolve(1)
+})
+let p1 = p.then(value => {
+  return p1
+})
+```
+
+然后需要判断 `x` 的类型
+
+```js
+if (x instanceof MyPromise) {
+  x.then(function(value) {
+    resolutionProcedure(promise2, value, resolve, reject)
+  }, reject)
+}
+```
+
+创建一个变量 `called` 用于判断是否已经调用过函数，然后判断 `x` 是否为对象或者函数，如果都不是的话，将 `x` 传入 `resolve` 中；如果`x`有then方法但then方法不是函数，也将 `x` 传入 `resolve` 中
+
+```js
+let called = false
+if (x !== null && (typeof x === 'object' || typeof x === 'function')) {
+  try {
+    let then = x.then
+    if (typeof then === 'function') {
+      ...
+    } else {
+      resolve(x)
+    }
+  }
+} else {
+  resolve(x)
+}
+```
+
+如果x是一个thenable对象，需要将`x`作为函数的作用域 `this` 调用其then方法，并且传递两个回调函数作为参数，第一个参数叫做 `resolvePromise` ，第二个参数叫做 `rejectPromise`，两个回调函数都需要判断是否已经执行过函数，然后进行相应的逻辑
+
+```js
+let called = false
+if (x !== null && (typeof x === 'object' || typeof x === 'function')) {
+  try {
+    let then = x.then
+    if (typeof then === 'function') {
+      let resolvePromise = y => {
+        if (called) return
+        called = true
+        resolutionProcedure(promise2, y, resolve, reject)
+      }
+
+      let rejectPromise = e => {
+        if (called) return
+        called = true
+        reject(e)
+      }
+
+      then.call(x, resolvePromise, rejectPromise)
+    } else {
+      resolve(x)
+    }
+  } catch (e) {
+    reject(e)
+  }
+} else {
+  resolve(x)
+}
+```
+
+最后贴一下完整代码
+
+```js
+const PENDING = 'pending'
+const RESOLVED = 'resolved'
+const REJECTED = 'rejected'
+
+function MyPromise(fn) {
+  const self = this
+  self.state = PENDING
+  self.value = null
+  self.resolvedCallbacks = []
+  self.rejectedCallbacks = []
+
+  function resolve(value) {
+    if (value instanceof MyPromise) {
+      return value.then(resolve, reject)
+    }
+    setTimeout(() => {
+      if (self.state === PENDING) {
+        self.state = RESOLVED
+        self.value = value
+        self.resolvedCallbacks.map(cb => cb(self.value))
+      }
+    })
+  }
+  function reject(value) {
+    setTimeout(() => {
+      if (self.state === PENDING) {
+        self.state = REJECTED
+        self.value = value
+        self.rejectedCallbacks.map(cb => cb(self.value))
+      }
+    })
+  }
+
+  try {
+    fn(resolve, reject)
+  } catch (e) {
+    reject(e)
   }
 }
 
+MyPromise.prototype.then = function (onFulfilled, onRejected) {
+  const self = this
+  onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : v => v
+  onRejected = typeof onRejected === 'function' ? onRejected : r => { throw r }
 
-module.exports = myPromise
-```
+  if (self.state === PENDING) {
+    reutrn(promise2 = new MyPromise((resolve, reject) => {
+      self.resolvedCallbacks.push(() => {
+        try {
+          const x = onFufilled(self.value)
+          resolutionProcedure(promise2, x, resolve, reject)
+        } catch (r) {
+          reject(r)
+        }
+      })
 
-但这个时候then还不支持链式调用，所以需要继续完善
+      self.rejectedCallbacks.push(() => {
+        try {
+          const x = onRejected(self.value)
+          resolutionProcedure(promise2, x, resolve, reject)
+        } catch (r) {
+          reject(r)
+        }
+      })
+    }))
+  }
 
-```js
+  if (self.currentState === RESOLVED) {
+    return (promise2 = new MyPromise((resolve, reject) => {
+      setTimeout(() => { // 规范 2.2.4
+        try {
+          const x = onFufilled(self.value)
+          resolutionProcedure(promise2, x, resolve, reject)
+        } catch (r) {
+          reject(r)
+        }
+      })
+    }))
+  }
+
+  if (self.currentState === REJECTED) {
+    return (promise2 = new MyPromise((resolve, reject) => {
+      setTimeout(() => {
+        try {
+          const x = onRejected(self.value)
+          resolutionProcedure(promise2, x, resolve, reject)
+        } catch (r) {
+          reject(r)
+        }
+      })
+    }))
+  }
+}
+
+function resolutionProcedure(promise2, x, resolve, reject) {
+  if (promise2 === x) {
+    return reject(new TypeError('Error'))
+  }
+  if (x instanceof MyPromise) {
+    x.then(function (value) {
+      resolutionProcedure(promise2, value, resolve, reject)
+    }, reject)
+  }
+  let called = false
+  if (x !== null && (typeof x === 'object' || typeof x === 'function')) {
+    try {
+      let then = x.then
+      if (typeof then === 'function') {
+        let resolvePromise = y => {
+          if (called) return
+          called = true
+          resolutionProcedure(promise2, y, resolve, reject)
+        }
+
+        let rejectPromise = e => {
+          if (called) return
+          called = true
+          reject(e)
+        }
+
+        then.call(x, resolvePromise, rejectPromise)
+      } else {
+        resolve(x)
+      }
+    } catch (e) {
+      reject(e)
+    }
+  } else {
+    resolve(x)
+  }
+}
+
+module.exports = MyPromise
 
 ```
 
 [Promises/A+规范（英文版）](https://promisesaplus.com/)
-
-[Promises/A+规范（中文版）](http://malcolmyu.github.io/malnote/2015/06/12/Promises-A-Plus/#note-4)
 
 ## 手写map
 
