@@ -81,6 +81,7 @@ module.exports = {
           'Algorithm/sort',
           'Algorithm/search',
           'Algorithm/dynamic-program',
+          'Algorithm/greedy',
         ]
       } , {
         title: '工程化',

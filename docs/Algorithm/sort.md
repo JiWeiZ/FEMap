@@ -217,6 +217,8 @@ console.log(mergeSort(arr))
 
 ## 快速排序
 
+使用递归函数quickSortRec解决快排
+
 ```js
 function quickSortRec (arr, il, ir) {
   var i
@@ -230,7 +232,7 @@ function quickSortRec (arr, il, ir) {
 
 ```
 
-划分过程
+partition是划分过程，排序发生在划分过程中
 
 ```js
 function partition(arr, il, ir) {
@@ -255,7 +257,7 @@ function partition(arr, il, ir) {
 }
 ```
 
-第一件要做的事情是选择主元（ pivot ），有好几种方式。最简单的一种是选择数组的第一项（最左项） 。然而，研究表明对于几乎已排序的数组，这不是一个好的选择，它将导致该算法的最差表现。另外一种方式是随机选择一个数组项或是选择中间项。 在本实现中，我们选择中间项作为主元。
+划分过程要做的第一件事情是选择主元（ pivot ），有好几种方式。最简单的一种是选择数组的第一项（最左项） 。然而，研究表明对于几乎已排序的数组，这不是一个好的选择，它将导致该算法的最差表现。另外一种方式是随机选择一个数组项或是选择中间项。 在本实现中，我们选择中间项作为主元。
 
 只要左指针和右指针没有交错，就执行划分。
 
@@ -270,7 +272,7 @@ function partition(arr, il, ir) {
 
 交换之后继续移动左指针和右指针，直到左指针大于右指针结束循环
 
-代码如下
+完整代码如下
 ```js
 var arr = [6, 7, 0, 4, 1, 5, 3, 2]
 function quickSort(arr) {

@@ -12,19 +12,14 @@ function backpack(capacity, w, v) {
       } else if (j < w[i - 1]) {
         F[i][j] = {
           value: F[i - 1][j].value,
-          option: [i-1]
+          option: [i - 1]
         }
+      } else if (F[i - 1][j].value > v[i - 1] + F[i - 1][j - w[i - 1]].value) {
+        F[i][j] = F[i - 1][j]
       } else {
-        if (F[i - 1][j].value > v[i - 1] + F[i - 1][j - w[i - 1]].value) {
-          F[i][j] = {
-            value: F[i - 1][j].value,
-            option: F[i - 1][j].option
-          }
-        } else {
-          F[i][j] = {
-            value: v[i - 1] + F[i - 1][j - w[i - 1]].value,
-            option: F[i - 1][j - w[i - 1]].option.concat(i - 1)
-          }
+        F[i][j] = {
+          value: v[i - 1] + F[i - 1][j - w[i - 1]].value,
+          option: F[i - 1][j - w[i - 1]].option.concat(i - 1)
         }
       }
     }
@@ -33,7 +28,5 @@ function backpack(capacity, w, v) {
   return F[v.length][capacity]
 }
 
-var v = [3, 4, 5],
-  w = [2, 3, 4],
-  capacity = 7
-console.log(backpack(capacity, w, v)); //输出 7
+var v = [3, 4, 5], w = [2, 3, 4], capacity = 7
+console.log(backpack(capacity, w, v)) //输出 {value: 7, option: [0, 1]}
