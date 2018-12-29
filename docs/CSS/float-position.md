@@ -121,7 +121,7 @@
 </div>
 ```
 
-### 浮动与负margin
+### 浮动和负margin
 
 这里举个例子：
 
@@ -248,6 +248,105 @@ f1的存在阻碍了f2的上浮，使用负margin以后可以改变这种阻碍�
     margin-left: -300px;
   }
 </style>
+### 浮动和height
+
+浮动元素设置height: 100%并没有什么鸟用。即使父元素已经被设置为BFC，即使F12看到父元素是有高度的。
+
+但是你显式给父元素设置一个height，比如设置一个height:50px，就能起作用。
+
+我猜测浏览器渲染的时候，是先根据父元素的高度渲染浮动元素的高度，此时父元素高度是0，所以浮动元素高度是0，完了在根据BFC的原则回过头来修正父元素的高度。
+
+```html
+<style>
+  main {
+    overflow: hidden;
+    margin: 10px 0;
+  }
+  article {
+    overflow: hidden;
+    margin-left: 100px;
+    background: #0cc;
+  }
+  aside {
+    width: 100px;
+    background: #cc0;
+    float: left;
+    height: 100%;
+  }
+</style>
+<main>
+  <aside>aside</aside>
+  <article>The list properties describe basic visual formatting of lists: they allow
+    style sheets to specify the marker type (image, glyph, or number), and the 
+    marker position with respect to the principal box (outside it or within it before
+    content).
+  </article>
+</main>
+<main>
+  <aside>aside</aside>
+  <article>The list properties describe basic visual formatting of lists: they allow
+    style sheets to specify the marker type (image, glyph, or number), and the 
+    marker position with respect to the principal box (outside it or within it before
+    content).
+  </article>
+</main>
+```
+
+<main style="overflow: hidden;margin: 10px 0;">
+  <aside style="width: 100px;
+                background: #cc0;
+                float: left;
+                height: 100%;">aside</aside>
+  <article style="overflow: hidden;
+                  margin-left: 100px;
+                  background: #0cc;">
+    The list properties describe basic visual formatting of lists: they allow
+    style sheets to specify the marker type (image, glyph, or number), and the 
+    marker position with respect to the principal box (outside it or within it 
+    before content).
+  </article>
+</main>
+<main style="overflow: hidden;height:50px">
+  <aside style="width: 100px;
+                background: #cc0;
+                float: left;
+                height: 100%;">aside</aside>
+  <article style="overflow: hidden;
+                  margin-left: 100px;
+                  background: #0cc;">
+    The list properties describe basic visual formatting of lists: they allow
+    style sheets to specify the marker type (image, glyph, or number), and the 
+    marker position with respect to the principal box (outside it or within it 
+    before content).
+  </article>
+</main>
+
+目前我只有一个形似的解决办法，即
+
+```css
+aside {
+  padding-bottom: 999px;
+  margin-bottom: -999px
+}
+```
+
+但这并没有让浮动元素高度等于父元素高度，只是看起来像罢了。
+
+<main style="overflow: hidden;">
+  <aside style="width: 100px;
+                background: #cc0;
+                float: left;
+                padding-bottom: 999px;
+                margin-bottom: -999px">aside</aside>
+  <article style="overflow: hidden;
+                  margin-left: 100px;
+                  background: #0cc;">
+    The list properties describe basic visual formatting of lists: they allow
+    style sheets to specify the marker type (image, glyph, or number), and the 
+    marker position with respect to the principal box (outside it or within it 
+    before content).
+  </article>
+</main>
 
 ## 定位
 

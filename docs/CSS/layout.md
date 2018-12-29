@@ -515,7 +515,7 @@
 </style>
 这样就不会垮掉啦！
 
-## 三栏布局：双飞翼
+## 三栏布局：双飞翼布局
 
 这双飞翼名字起得还可以。
 
@@ -666,3 +666,193 @@
   }
 </style>
 下面简单说一下为啥right不是margin-right: -200px。因为如果调成margin-right: -200px，right的左边会紧贴middle的右边，这样会导致整体边长。然后还有第一点就是，因为后出现的浮动元素不能不前面的浮动元素高，right就比left后出现，所以如果left不上浮的话right的margin-left调成-999px也没用。
+
+## 双栏布局：基于position
+
+```html
+<style>
+  main {
+    position: relative;
+  }
+  article {
+    margin-left: 100px;
+    background: #0cc;
+  }
+  aside {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 100px;
+    background: #cc0;
+  }
+</style>
+
+<main>
+  <article>The list properties describe basic visual formatting of lists: they allow
+    style sheets to specify the
+    marker type (image,
+    glyph, or number), and the marker position with respect to the principal box
+    (outside it or within it before
+    content).
+  </article>
+  <aside>aside</aside>
+</main>
+```
+
+<main style="position: relative;">
+  <article style="
+                 	margin-left: 100px;
+    							background: #0cc;
+                  ">
+    The list properties describe basic visual formatting of lists: they allow
+    style sheets to specify the
+    marker type (image,
+    glyph, or number), and the marker position with respect to the principal box
+    (outside it or within it before
+    content).
+  </article>
+  <aside style="    
+                position: absolute;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                width: 100px;
+                background: #cc0;
+                ">
+    aside</aside>
+</main>
+
+## 双栏布局：基于float
+
+```html
+<style>
+  main {
+    overflow: hidden;
+  }
+  article {
+    overflow: hidden;
+    margin-left: 100px;
+    background: #0cc;
+  }
+  aside {
+    width: 100px;
+    background: #cc0;
+    float: left;
+    padding-bottom: 999px;
+    margin-bottom: -999px;
+  }
+</style>
+
+<main>
+  <aside>aside</aside>
+  <article>The list properties describe basic visual formatting of lists: they allow
+    style sheets to specify the
+    marker type (image,
+    glyph, or number), and the marker position with respect to the principal box
+    (outside it or within it before
+    content).
+  </article>
+</main>
+```
+
+<main style="overflow: hidden;">
+  <aside style="width: 100px;
+                background: #cc0;
+                float: left;
+                padding-bottom: 999px;
+                margin-bottom: -999px">aside</aside>
+  <article style="overflow: hidden;
+                  margin-left: 100px;
+                  background: #0cc;">
+    The list properties describe basic visual formatting of lists: they allow
+    style sheets to specify the marker type (image, glyph, or number), and the 
+    marker position with respect to the principal box (outside it or within it 
+    before content).
+  </article>
+</main>
+
+## 双栏布局：基于table
+
+```html
+<style>
+  main {
+    display: table;
+  }
+  article {
+    display: table-cell;
+    background: #0cc;
+  }
+  aside {
+    display: table-cell;
+    width: 100px;
+    background: #cc0;
+  }
+</style>
+
+<main>
+  <aside>aside</aside>
+  <article>The list properties describe basic visual formatting of lists: they allow
+    style sheets to specify the
+    marker type (image,
+    glyph, or number), and the marker position with respect to the principal box
+    (outside it or within it before
+    content).
+  </article>
+</main>
+```
+
+<main style="display: table;">
+  <aside style="
+                display: table-cell;
+                width: 100px;
+      					background: #cc0;">aside</aside>
+  <article style="
+                  display: table-cell;
+    							background: #0cc;">
+    The list properties describe basic visual formatting of lists: they allow
+    style sheets to specify the marker type (image, glyph, or number), and the 
+    marker position with respect to the principal box (outside it or within it 
+    before content).
+  </article>
+</main>
+
+## 双兰布局：基于flex
+
+```html
+<style>
+  main {
+    display: flex;;
+  }
+  article {
+    background: #0cc;
+  }
+  aside {
+    flex: 0 0 100px;
+    background: #cc0;
+  }
+</style>
+
+<main>
+  <aside>aside</aside>
+  <article>The list properties describe basic visual formatting of lists: they allow
+    style sheets to specify the
+    marker type (image,
+    glyph, or number), and the marker position with respect to the principal box
+    (outside it or within it before
+    content).
+  </article>
+</main>
+```
+
+<main style="display: flex;">
+  <aside style="
+                flex: 0 0 100px;
+      					background: #cc0;">aside</aside>
+  <article style="background: #0cc;">
+    The list properties describe basic visual formatting of lists: they allow
+    style sheets to specify the marker type (image, glyph, or number), and the 
+    marker position with respect to the principal box (outside it or within it 
+    before content).
+  </article>
+</main>
