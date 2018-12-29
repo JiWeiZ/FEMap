@@ -47,12 +47,20 @@ module.exports = {
         title: 'CSS',
         collapsable: false,
         children: [
+          'CSS/css-selector',
+          'CSS/text',
           'CSS/visual-format',
           'CSS/float-position',
           'CSS/visibility-z-index',
-          'CSS/text',
-          'CSS/css-selector',
           'CSS/layout',
+          'CSS/CSS3-animation',
+          'CSS/CSS3-background',
+          'CSS/CSS3-border',
+          'CSS/CSS3-flex',
+          'CSS/CSS3-font',
+          'CSS/CSS3-gradient',
+          'CSS/CSS3-grid',
+          'CSS/CSS3-transform',
         ]
       }, {
         title: '网络',
@@ -66,6 +74,7 @@ module.exports = {
           'Network/DNS',
           'Network/CDN',
           'Network/cache',
+          'Network/network-process',
         ]
       }, {
         title: '一些题目',
