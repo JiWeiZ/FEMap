@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Sangreal</title>
+  <style>
+    .Sangreal-container * {
+      padding: 0;
+      margin: 0;
+    }
+    .Sangreal-container {
+      /* display: flow-root; */
+      padding: 0 200px 0 170px;
+    }
+    .Sangreal-left {
+      float: left;
+      width: 170px;
+      background: yellow;
+      /* position: relative; */
+      /* left: -170px; */
+      /* margin-left: -100%; */
+      margin-left: calc(-100% - 170px);
+    }
+    .Sangreal-right {
+      float: left;
+      width: 200px;
+      background: red;
+      margin-right: -200px;
+    }
+    .Sangreal-middle {
+      float: left;
+      position: relative;
+      width: 100%;
+      background: #0cc;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="Sangreal-container">
+    <article class="Sangreal-middle">
+      <h3>middle article</h3>
+    </article>
+    <aside class="Sangreal-left">
+      <h3>left sidebar</h3>
+      <p>left的要点：</p>
+      <p>1、margin-left: -100%;</p>
+      <p>2、left等于负宽度</p>
+    </aside>
+    <aside class="Sangreal-right">
+      <h3>right sidebar</h3>
+      <p>right的要点：</p>
+      <p>margin-right等于负宽度</p>
+    </aside>
+  </main>
+</body>
+
+</html>

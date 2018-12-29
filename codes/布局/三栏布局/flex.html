@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>flex</title>
+  <style>
+    .flex-container {
+      display: flex;
+    }
+
+    .flex-left,
+    .flex-right {
+      background: #cc0;
+      flex: 0 0 10em;
+    }
+
+    .flex-middle {
+      background: #0cc;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="flex-container">
+    <aside class="flex-left">aside left</aside>
+    <article class="flex-middle">The list properties describe basic visual formatting of lists:
+      they allow style sheets to specify the marker type (image, glyph, or number), and
+      the marker position with respect to the principal box (outside it or within it
+      before content).
+    </article>
+    <aside class="flex-right">aside right</aside>
+  </main>
+</body>
+
+</html>

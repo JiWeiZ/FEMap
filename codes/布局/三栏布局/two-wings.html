@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>two-wings</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    .clearfix::after {
+      content: '';
+      display: block;
+      height: 0;
+      clear: both;
+    }
+
+    .two-wings-middle {
+      float: left;
+      width: 100%;
+      background: #0cc;
+    }
+
+    .two-wings-middle-inside {
+      padding: 0 200px 0 170px;
+    }
+
+    .two-wings-left {
+      float: left;
+      background: yellow;
+      width: 170px;
+      margin-left: -100%;
+    }
+
+    .two-wings-right {
+      float: left;
+      background: red;
+      width: 200px;
+      margin-left: -200px;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="two-wings-container clearfix">
+    <div class="two-wings-middle">
+      <article class="two-wings-middle-inside">
+        <h3>middle article</h3>
+      </article>
+    </div>
+    <aside class="two-wings-left">
+      <h3>left sidebar</h3>
+      <p>left的要点：</p>
+      <p>1、margin-left: -100%;</p>
+    </aside>
+    <aside class="two-wings-right">
+      <h3>right sidebar</h3>
+      <p>right的要点：</p>
+      <p>margin-right等于负宽度</p>
+    </aside>
+  </main>
+</body>
+
+</html>

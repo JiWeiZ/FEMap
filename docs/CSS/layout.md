@@ -1,8 +1,6 @@
 # 布局
 
-## 三栏布局
-
-### 基于position
+## 三栏布局：基于position
 
 1. 左右aside定宽，如此处是10em
 2. 将左右aside通过absolute固定下来
@@ -82,7 +80,7 @@
     margin: 0 10em;
   }
 </style>
-### 基于float
+## 三栏布局：基于float
 
 1. 左右aside定宽，如此处是10em
 2. 将左右aside通过float固定下来
@@ -167,8 +165,7 @@
     background: #0cc;
   }
 </style>
-
-### 基于flex
+## 三栏布局：基于flex
 
 1. 让aside失去弹性，并给一个初始长度10em
 2. 中间部分正常弹性
@@ -222,8 +219,9 @@
     background: #0cc;
   }
 </style>
+## 三栏布局：圣杯布局
 
-### 圣杯布局
+圣杯布局也是三栏布局
 
 圣杯布局是基于**负边距对浮动**的影响实现的。
 
@@ -268,7 +266,7 @@
 </main>
 ```
 
-#### 第一步
+### 第一步
 
 要点1：middle, left, right都是左浮动元素
 
@@ -319,7 +317,7 @@
   }
 </style>
 
-#### 第二步
+### 第二步
 
 
 要点4：要让left置于middle的左上方，要解决2个问题：
@@ -392,7 +390,7 @@
   }
 </style>
 
-#### 第三步
+### 第三步
 
 最后写的是right，只需要将margin-right设为负宽度即可
 
@@ -454,7 +452,7 @@
   }
 </style>
 
-但是呢，这么写圣杯是有一个BUG的，那就是middle的宽度一旦小于left的宽度就会垮掉。我们可以优化一下，不使用position + left的方式使left元素向左移动，而是使用margin-left: calc(-100% - 负宽度)的办法
+但是呢，这么写圣杯是有一个BUG的，那就是middle的宽度一旦小于left的宽度就会垮掉。当然一般情况下middle是比left宽的，设一个最小宽度就能解决问题。不过我们还是可以优化一下，不使用position + left的方式使left元素向左移动，而是使用margin-left: calc(-100% - 负宽度)的办法。
 
 ```css
 .Sangreal-left {
@@ -515,3 +513,156 @@
     background: #0cc;
   }
 </style>
+这样就不会垮掉啦！
+
+## 三栏布局：双飞翼
+
+这双飞翼名字起得还可以。
+
+双飞翼与与圣杯布局不同之处在于，圣杯布局给left和right提供空间的是外层的container的padding，而双飞翼是由middle提供的。所以为什么叫双飞翼，估计是发明这个布局方法的人把middle看成一只鸟，left和right分别是鸟的左翼和右翼。
+
+```html
+<style>
+  .two-wings-middle {
+    float: left;
+    width: 100%;
+    background: #0cc;
+  }
+
+  .two-wings-middle-inside {
+    padding: 0 200px 0 170px;
+  }
+
+  .two-wings-left {
+    float: left;
+    background: yellow;
+    width: 170px;
+  }
+
+  .two-wings-right {
+    float: left;
+    background: red;
+    width: 200px;
+  }
+</style>
+
+<main class="two-wings-container clearfix">
+  <div class="two-wings-middle">
+    <article class="two-wings-middle-inside">
+      <h3>middle article</h3>
+    </article>
+  </div>
+  <aside class="two-wings-left">
+    <h3>left sidebar</h3>
+    <p>left的要点：</p>
+    <p>margin-left: -100%;</p>
+  </aside>
+  <aside class="two-wings-right">
+    <h3>right sidebar</h3>
+    <p>right的要点：</p>
+    <p>margin-left等于负宽度</p>
+  </aside>
+</main>
+```
+
+<main class="two-wings-container-1 clearfix">
+  <div class="two-wings-middle-1">
+    <article class="two-wings-middle-inside-1">
+      <h3>middle article</h3>
+    </article>
+  </div>
+  <aside class="two-wings-left-1">
+    <h3>left sidebar</h3>
+    <p>left的要点：</p>
+    <p>margin-left: -100%;</p>
+  </aside>
+  <aside class="two-wings-right-1">
+    <h3>right sidebar</h3>
+    <p>right的要点：</p>
+    <p>margin-left等于负宽度</p>
+  </aside>
+</main>
+
+<style>
+	.two-wings-container-1 * {
+    margin: 0;
+    padding: 0;
+	}
+  .two-wings-middle-1 {
+    float: left;
+    width: 100%;
+    background: #0cc;
+  }
+  .two-wings-middle-inside-1 {
+    padding: 0 200px 0 170px;
+  }
+  .two-wings-left-1 {
+    float: left;
+    background: yellow;
+    width: 170px;
+  }
+  .two-wings-right-1 {
+    float: left;
+    background: red;
+    width: 200px;
+  }
+</style>
+然后还是根据浮动和负margin的关系，让left和right分别浮到左上方和右上方
+
+```css
+.two-wings-left {
+	...
+  margin-left: -100%;
+}
+
+.two-wings-right {
+	...
+  margin-left: -200px;
+}
+```
+
+<main class="two-wings-container-2 clearfix">
+  <div class="two-wings-middle-2">
+    <article class="two-wings-middle-inside-2">
+      <h3>middle article</h3>
+    </article>
+  </div>
+  <aside class="two-wings-left-2">
+    <h3>left sidebar</h3>
+    <p>left的要点：</p>
+    <p>margin-left: -100%;</p>
+  </aside>
+  <aside class="two-wings-right-2">
+    <h3>right sidebar</h3>
+    <p>right的要点：</p>
+    <p>margin-left等于负宽度</p>
+  </aside>
+</main>
+
+<style>
+	.two-wings-container-2 * {
+    margin: 0;
+    padding: 0;
+	}
+  .two-wings-middle-2 {
+    float: left;
+    width: 100%;
+    background: #0cc;
+  }
+  .two-wings-middle-inside-2 {
+    padding: 0 200px 0 170px;
+  }
+  .two-wings-left-2 {
+    float: left;
+    background: yellow;
+    width: 170px;
+    margin-left: -100%;
+  }
+  .two-wings-right-2 {
+    float: left;
+    background: red;
+    width: 200px;
+    margin-left: -200px;
+  }
+</style>
+下面简单说一下为啥right不是margin-right: -200px。因为如果调成margin-right: -200px，right的左边会紧贴middle的右边，这样会导致整体边长。然后还有第一点就是，因为后出现的浮动元素不能不前面的浮动元素高，right就比left后出现，所以如果left不上浮的话right的margin-left调成-999px也没用。

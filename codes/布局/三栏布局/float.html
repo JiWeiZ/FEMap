@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>float</title>
+  <style>
+    .clearfix::after {
+      content: '';
+      display: block;
+      height: 0;
+      clear: both;
+    }
+    .float-left {
+      float: left;
+      width: 10em;
+      background: #cc0;
+    }
+    .float-right {
+      float: right;
+      width: 10em;
+      background: #cc0;
+    }
+    .float-middle {
+      margin: 0 10em;
+      background: #0cc;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="float-container clearfix">
+    <aside class="float-left">aside left aside left aside left 
+        aside left aside left aside left aside left 
+        aside left aside left aside left aside left</aside>
+    <aside class="float-right">aside right aside right aside right 
+      aside right aside right aside right aside right aside 
+      right aside right aside right aside right aside right 
+      aside right aside right aside right aside right aside right</aside>
+    <article class="float-middle">The list properties describe basic visual formatting of lists:
+      they allow style sheets to specify the marker type (image, glyph, or number), and
+      the marker position with respect to the principal box (outside it or within it
+      before content).
+    </article>
+  </main>
+</body>
+
+</html>
