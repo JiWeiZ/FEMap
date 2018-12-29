@@ -52,6 +52,7 @@ module.exports = {
           'CSS/visibility-z-index',
           'CSS/text',
           'CSS/css-selector',
+          'CSS/layout',
         ]
       }, {
         title: '网络',

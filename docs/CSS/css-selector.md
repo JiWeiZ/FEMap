@@ -32,7 +32,7 @@
 <div style="columns:12em"><ul>
  <li><a href=" https://developer.mozilla.org/zh-CN/docs/Web/CSS/:active" title=":active CSS伪类匹配被用户激活的元素。它让页面能在浏览器监测到激活时给出反馈。当用鼠标交互时，它代表的是用户按下按键和松开按键之间的时间。&nbsp;:active 伪类通常用来匹配tab键交互。通常用于但并不限于 <a> 和&nbsp;<button> HTML元素。"><code>:active</code></a></li>
  <li><a href=" https://developer.mozilla.org/zh-CN/docs/Web/CSS/:any" title="The :any() pseudo-class lets you quickly construct sets of similar selectors by establishing groups from which any of the included items will match. This is an alternative to having to repeat the entire selector for the one item that varies."><code>:any</code></a></li>
- <li><a href=" https://developer.mozilla.org/zh-CN/docs/Web/CSS/:checked" title=":checked CSS 伪类选择器表示任何处于选中状态的radio(&lt;input type=&quot;radio&quot;&gt;), checkbox (&lt;input type=&quot;checkbox&quot;&gt;) 或(&quot;select&quot;)&nbsp;元素中的option&nbsp;HTML元素(&quot;option&quot;)。"><code>:checked</code></a></li>
+ <li><a href=" https://developer.mozilla.org/zh-CN/docs/Web/CSS/:checked" title=":checked CSS 伪类选择器表示任何处于选中状态的radio, checkbox或(&quot;select&quot;)&nbsp;元素中的option&nbsp;HTML元素(&quot;option&quot;)。"><code>:checked</code></a></li>
  <li><a href=" https://developer.mozilla.org/zh-CN/docs/Web/CSS/:default" title=":default CSS pseudo-class 表示一组相关元素中的默认表单元素。"><code>:default</code></a></li>
  <li><a href=" https://developer.mozilla.org/zh-CN/docs/Web/CSS/:dir"><code>:dir()</code></a></li>
  <li><a href=" https://developer.mozilla.org/zh-CN/docs/Web/CSS/:disabled" title=":disabled&nbsp;&nbsp;CSS 伪类表示任何被禁用的元素。如果一个元素不能被激活（如选择、点击或接受文本输入）或获取焦点，则该元素处于被禁用状态。元素还有一个启用状态（enabled state），在启用状态下，元素可以被激活或获取焦点。"><code>:disabled</code></a></li>
@@ -71,6 +71,7 @@
  <li><a href=" https://developer.mozilla.org/zh-CN/docs/Web/CSS/:valid" title=":valid CSS 伪类表示内容验证正确的<input> 或其他 <form>&nbsp;元素。这能简单地将校验字段展示为一种能让用户辨别出其输入数据的正确性的样式。"><code>:valid</code></a></li>
  <li><a href=" https://developer.mozilla.org/zh-CN/docs/Web/CSS/:visited" title=":visited&nbsp;CSS伪类表示用户已访问过的链接。出于隐私原因，可以使用此选择器修改的样式非常有限。"><code>:visited</code></a></li>
 </ul></div>
+
 ## 伪元素选择器
 
 - [`::after`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::after)
