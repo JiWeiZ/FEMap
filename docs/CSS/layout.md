@@ -327,125 +327,11 @@
 1. 让left置于middle的左边
 2. 让left置于middle的上边
 
-第一个问题的解决办法是使用position + left定位；<br/>第二个问题关系到浮动元素的一个性质，即浮动元素不会比之前的浮动元素浮动的更高（可以参考前面写的关于浮动的章节）。由于middle元素在left之前渲染，所以middle阻碍了left的上浮，使用负margin可以解决这个问题，这里举个例子：
+第一个问题的解决办法是使用position + left定位；<br/>第二个问题关系到浮动元素的一个性质，即浮动元素不会比之前的浮动元素浮动的更高（可以参考前面写的关于浮动的章节）。由于middle元素在left之前渲染，所以middle阻碍了left的上浮，使用负margin可以解决这个问题。
 
-```html
-<div class="wrapper-f">
-  <div class="f1"></div>
-  <div class="f2"></div>
-</div>
-```
+<a href="/FEMap/CSS/float-position.html#浮动与负margin">浮动与负margin</a>
 
-```css
-<style>
-  .wrapper-f {
-    width: 300px;
-  }
-  .wrapper-f > *{
-    float: left;
-    width: 100%;
-  }
-  .f1 {
-    background: red;
-    height: 50px;
-  }
-  .f2 {
-    background: yellow;
-    height: 30px;
-  }
-</style>
-```
-
-<div class="wrapper-f clearfix">
-  <div class="f1">f1</div>
-  <div class="f2">f2</div>
-</div>
-
-<style>
-  .wrapper-f {
-    width: 300px;
-  }
-  .wrapper-f > *{
-    float: left;
-    width: 100%;
-  }
-  .f1 {
-    background: red;
-    height: 50px;
-  }
-  .f2 {
-    background: yellow;
-    height: 30px;
-  }
-</style>
-f1的存在阻碍了f2的上浮，使用负margin以后可以改变这种阻碍，当margin-left是-299px时，还有1px在阻碍f2的上浮
-
-```css
-.f2 {
-  background: yellow;
-  height: 30px;
-  margin-left: -299px;
-}
-```
-<div class="wrapper-f-2 clearfix">
-  <div class="f1-2">f1</div>
-  <div class="f2-2">f2</div>
-</div>
-
-<style>
-  .wrapper-f-2 {
-    width: 300px;
-  }
-  .wrapper-f-2 > *{
-    float: left;
-    width: 100%;
-  }
-  .f1-2 {
-    background: red;
-    height: 50px;
-  }
-  .f2-2 {
-    background: yellow;
-    height: 30px;
-    margin-left: -299px;
-  }
-</style>
-
-但是当margin-left等于-300px时，已经没有任何东西能阻挡f2上浮的决心，f2终于浮动了上去。**这种感觉给人就像是，浮动元素是漂浮在水里的木头，下面的木头被上面的木头挡住了，就浮不上去。**
-
-```css
-.f2 {
-  background: yellow;
-  height: 30px;
-  margin-left: -300px;
-}
-```
-
-<div class="wrapper-f-3 clearfix">
-  <div class="f1-3">f1</div>
-  <div class="f2-3">f2</div>
-</div>
-
-<style>
-  .wrapper-f-3 {
-    width: 300px;
-  }
-  .wrapper-f-3 > *{
-    float: left;
-    width: 100%;
-  }
-  .f1-3 {
-    background: red;
-    height: 50px;
-  }
-  .f2-3 {
-    background: yellow;
-    height: 30px;
-    margin-left: -300px;
-  }
-</style>
-
-理解了这一点left该怎么写就很简单了
+如果理解浮动与负margin的关系，就能理解left的写法了
 
 ```css
 .Sangreal-left {
@@ -458,7 +344,7 @@ f1的存在阻碍了f2的上浮，使用负margin以后可以改变这种阻碍�
 }
 ```
 
-<main class="Sangreal-container-2">
+<main class="Sangreal-container-2 clearfix">
   <article class="Sangreal-middle-2">
     <h3>middle article</h3>
   </article>
@@ -497,7 +383,6 @@ f1的存在阻碍了f2的上浮，使用负margin以后可以改变这种阻碍�
     float: left;
     width: 200px;
     background: red;
-    margin-right: -200px;
   }
   .Sangreal-middle-2 {
     float: left;
@@ -507,5 +392,126 @@ f1的存在阻碍了f2的上浮，使用负margin以后可以改变这种阻碍�
   }
 </style>
 
+#### 第三步
 
+最后写的是right，只需要将margin-right设为负宽度即可
 
+```css
+.Sangreal-right {
+  float: left;
+  width: 200px;
+  background: red;
+  margin-right: -200px;
+}
+```
+
+<main class="Sangreal-container-3 clearfix">
+  <article class="Sangreal-middle-3">
+    <h3>middle article</h3>
+  </article>
+  <aside class="Sangreal-left-3">
+    <h3>left sidebar</h3>
+    <p>left的要点：</p>
+    <p>1、margin-left: -100%;</p>
+    <p>2、left等于负宽度</p>
+  </aside>
+  <aside class="Sangreal-right-3">
+    <h3>right sidebar</h3>
+    <p>right的要点：</p>
+    <p>margin-right等于负宽度</p>
+  </aside>
+</main>
+
+<style>
+  .Sangreal-container-3 * {
+    padding: 0;
+    margin: 0;
+  }
+  .Sangreal-container-3 {
+    /* display: flow-root; */
+    padding: 0 200px 0 170px;
+  }
+  .Sangreal-left-3 {
+    float: left;
+    width: 170px;
+    background: yellow;
+    position: relative;
+    left: -170px;
+    margin-left: -100%;
+    /* margin-left: calc(-100% - 170px); */
+  }
+  .Sangreal-right-3 {
+    float: left;
+    width: 200px;
+    margin-right: -200px;
+    background: red;
+  }
+  .Sangreal-middle-3 {
+    float: left;
+    position: relative;
+    width: 100%;
+    background: #0cc;
+  }
+</style>
+
+但是呢，这么写圣杯是有一个BUG的，那就是middle的宽度一旦小于left的宽度就会垮掉。我们可以优化一下，不使用position + left的方式使left元素向左移动，而是使用margin-left: calc(-100% - 负宽度)的办法
+
+```css
+.Sangreal-left {
+  float: left;
+  width: 170px;
+  background: yellow;
+  /* position: relative; */
+  /* left: -170px; */
+  /* margin-left: -100%; */
+  margin-left: calc(-100% - 170px);
+}
+```
+<main class="Sangreal-container-4 clearfix">
+  <article class="Sangreal-middle-4">
+    <h3>middle article</h3>
+  </article>
+  <aside class="Sangreal-left-4">
+    <h3>left sidebar</h3>
+    <p>left的要点：</p>
+    <p>1、margin-left: -100%;</p>
+    <p>2、left等于负宽度</p>
+  </aside>
+  <aside class="Sangreal-right-4">
+    <h3>right sidebar</h3>
+    <p>right的要点：</p>
+    <p>margin-right等于负宽度</p>
+  </aside>
+</main>
+
+<style>
+  .Sangreal-container-4 * {
+    padding: 0;
+    margin: 0;
+  }
+  .Sangreal-container-4 {
+    /* display: flow-root; */
+    padding: 0 200px 0 170px;
+  }
+  .Sangreal-left-4 {
+    float: left;
+    width: 170px;
+    background: yellow;
+    /* position: relative; */
+    /* left: -170px; */
+    /* margin-left: -100%; */
+    margin-left: calc(-100% - 170px);
+  }
+  .Sangreal-right-4 {
+    float: left;
+    width: 200px;
+    margin-right: -200px;
+    background: red;
+  }
+  .Sangreal-middle-4 {
+    float: left;
+    position: relative;
+    width: 100%;
+    background: #0cc;
+  }
+</style>

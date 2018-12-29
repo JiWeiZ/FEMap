@@ -121,6 +121,134 @@
 </div>
 ```
 
+### 浮动与负margin
+
+这里举个例子：
+
+```html
+<div class="wrapper-f clearfix">
+  <div class="f1"></div>
+  <div class="f2"></div>
+</div>
+```
+
+```css
+<style>
+  .wrapper-f {
+    width: 300px;
+  }
+  .wrapper-f > *{
+    float: left;
+    width: 100%;
+  }
+  .f1 {
+    background: red;
+    height: 50px;
+  }
+  .f2 {
+    background: yellow;
+    height: 30px;
+  }
+</style>
+```
+
+<div class="wrapper-f clearfix">
+  <div class="f1">f1</div>
+  <div class="f2">f2</div>
+</div>
+
+<style>
+	.clearfix::after {
+    display: block;
+    content: '';
+    height: 0;
+    clear: both;
+	}
+  .wrapper-f {
+    width: 300px;
+  }
+  .wrapper-f > *{
+    float: left;
+    width: 100%;
+  }
+  .f1 {
+    background: red;
+    height: 50px;
+  }
+  .f2 {
+    background: yellow;
+    height: 30px;
+  }
+</style>
+
+f1的存在阻碍了f2的上浮，使用负margin以后可以改变这种阻碍，当margin-left是-299px时，还有1px在阻碍f2的上浮
+
+```css
+.f2 {
+  background: yellow;
+  height: 30px;
+  margin-left: -299px;
+}
+```
+
+<div class="wrapper-f-2 clearfix">
+  <div class="f1-2">f1</div>
+  <div class="f2-2">f2</div>
+</div>
+
+<style>
+  .wrapper-f-2 {
+    width: 300px;
+  }
+  .wrapper-f-2 > *{
+    float: left;
+    width: 100%;
+  }
+  .f1-2 {
+    background: red;
+    height: 50px;
+  }
+  .f2-2 {
+    background: yellow;
+    height: 30px;
+    margin-left: -299px;
+  }
+</style>
+
+但是当margin-left等于-300px时，已经没有任何东西能阻挡f2上浮的决心，f2终于浮动了上去。**这种感觉给人就像是，浮动元素是漂浮在水里的木头，下面的木头被上面的木头挡住了，就浮不上去。**
+
+```css
+.f2 {
+  background: yellow;
+  height: 30px;
+  margin-left: -300px;
+}
+```
+
+<div class="wrapper-f-3 clearfix">
+  <div class="f1-3">f1</div>
+  <div class="f2-3">f2</div>
+</div>
+
+<style>
+  .wrapper-f-3 {
+    width: 300px;
+  }
+  .wrapper-f-3 > *{
+    float: left;
+    width: 100%;
+  }
+  .f1-3 {
+    background: red;
+    height: 50px;
+  }
+  .f2-3 {
+    background: yellow;
+    height: 30px;
+    margin-left: -300px;
+  }
+</style>
+
 ## 定位
 
 ### 关于position：
