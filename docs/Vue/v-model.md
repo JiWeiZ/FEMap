@@ -289,17 +289,11 @@ Vue 提供了一个 `$listeners` 属性，它是一个对象，里面包含了�
 
 ## 实际使用
 
-使用vue-cli新建一个vue项目
+[代码地址](https://github.com/JiWeiZ/v-model)
 
-在index.html中插入字体图标链接
 
-```html
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-```
 
-<video src="../.vuepress/public/assets/20190103134604.mp4"></video>
-
-<img src="../.vuepress/public/assets/17005479.jpg"/>
+<img src="../.vuepress/public/assets/1546496785.gif"/>
 
 
 
