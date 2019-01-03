@@ -285,17 +285,35 @@ Vue在设计的时候考虑到了这一点，所以组件可以接受任意的�
 
 Vue 提供了一个 `$listeners` 属性，它是一个对象，里面包含了作用在这个组件上的所有监听器。
 
-
-
 ## 实际使用
 
 [代码地址](https://github.com/JiWeiZ/v-model)
 
-
-
 <img src="../.vuepress/public/assets/1546496785.gif"/>
 
+这是一个多标签组件\<tag-box\>，可以设定最大标签数
 
+```html
+<tag-box v-model="tags1" :maxTagNum="3">新建一级标签（最多3个）</tag-box>
+<tag-box v-model="tags2" :maxTagNum="6">新建二级标签（最多6个）</tag-box>
+```
+
+v-model绑定一个数组，可根据数组长度length生成length个输入组件<tag-input\>
+
+```js
+data () {
+  return {
+    tags1: [],
+    tags2: [5, 6, 7]
+  }
+}
+```
+
+输入组件<tag-input\>是对原生表单元素input的包装：
+
+1. 长度可以根据输入内容的大小变化
+2. 输入时键入回车可以新增一个新标签，键入删除或退格删除标签
+3. 失去焦点时，若输入内容为空，则删除标签
 
 
 
