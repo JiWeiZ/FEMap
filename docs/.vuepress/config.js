@@ -53,13 +53,13 @@ module.exports = {
           'CSS/float-position',
           'CSS/visibility-z-index',
           'CSS/layout',
+          'CSS/CSS3-flex',
+          'CSS/CSS3-grid',
           'CSS/CSS3-animation',
           'CSS/CSS3-background',
           'CSS/CSS3-border',
-          'CSS/CSS3-flex',
           'CSS/CSS3-font',
           'CSS/CSS3-gradient',
-          'CSS/CSS3-grid',
           'CSS/CSS3-transform',
         ]
       }, {
@@ -104,6 +104,7 @@ module.exports = {
         collapsable: false,
         children: [
           'Vue/responsive',
+          'Vue/v-model',
         ]
       } , {
         title: 'Node',
