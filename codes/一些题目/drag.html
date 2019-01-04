@@ -29,6 +29,7 @@
       display: flex;
       flex-direction: row-reverse;
       align-items: center;
+      cursor: move;
     }
 
     .dragable-head>span {
@@ -42,82 +43,82 @@
 
     .dragable-left {
       position: absolute;
-      top: 8px;
-      bottom: 8px;
+      top: 4px;
+      bottom: 4px;
       left: -3px;
       width: 5px;
       cursor: ew-resize;
-      background: red;
     }
 
     .dragable-right {
       position: absolute;
-      top: 8px;
-      bottom: 8px;
+      top: 4px;
+      bottom: 4px;
       right: -3px;
       width: 5px;
       cursor: ew-resize;
-      background: red;
     }
 
     .dragable-top {
       position: absolute;
       top: -3px;
-      right: 8px;
-      left: 8px;
+      right: 4px;
+      left: 4px;
       height: 5px;
       cursor: ns-resize;
-      background: red;
     }
 
     .dragable-bottom {
       position: absolute;
       bottom: -3px;
-      left: 8px;
-      right: 8px;
+      left: 4px;
+      right: 4px;
       height: 5px;
       cursor: ns-resize;
-      background: red;
     }
 
     .dragable-rt {
       position: absolute;
-      top: 0;
-      right: 0;
+      top: -4px;
+      right: -4px;
       width: 8px;
       height: 8px;
       cursor: nesw-resize;
-      background: blue;
     }
 
     .dragable-rb {
       position: absolute;
-      bottom: 0;
-      right: 0;
+      bottom: -4px;
+      right: -4px;
       width: 8px;
       height: 8px;
       cursor: nwse-resize;
-      background: blue;
     }
 
     .dragable-lt {
       position: absolute;
-      top: 0;
-      left: 0;
+      top: -4px;
+      left: -4px;
       width: 8px;
       height: 8px;
       cursor: nwse-resize;
-      background: blue;
     }
 
     .dragable-lb {
       position: absolute;
-      left: 0;
-      bottom: 0;
+      left: -4px;
+      bottom: -4px;
       width: 8px;
       height: 8px;
       cursor: nesw-resize;
-      background: blue;
+    }
+
+    .hide {
+      display: none;
+    }
+
+    .show {
+      display: block;
     }
   </style>
 </head>
@@ -126,10 +127,11 @@
   <div id="dragable">
     <div class="dragable-head">
       <span class="dragable-close">×</span>
-      <span class="dragable-max">口</span>
+      <span class="dragable-max show">口</span>
+      <span class="dragable-restore hide">回</span>
       <span class="dragable-min">-</span>
     </div>
-    <div class="dragable-content">可拖拽，最大化，最小化</div>
+    <div class="dragable-content show">可拖拽，可缩放，最大化，最小化</div>
   </div>
 </body>
 
@@ -141,6 +143,9 @@
       this.MAXHEIGHT = 600
       this.MINHEIGHT = 200
       this.container = document.getElementById(containerId)
+
+      this.canDrag = true
+
       this.controls = {}
       var controls = ['top', 'right', 'bottom', 'left', 'rt', 'rb', 'lt', 'lb']
       controls.forEach(e => {
@@ -148,6 +153,144 @@
         control.className = `dragable-${e}`
         this.container.appendChild(control)
         this.controls[e] = control
+      })
+
+      this.controls.head = this.container.querySelector('.dragable-head')
+      this.min = this.container.querySelector('.dragable-min')
+      this.max = this.container.querySelector('.dragable-max')
+      this.restore = this.container.querySelector('.dragable-restore')
+      this.close = this.container.querySelector('.dragable-close')
+      this.content = this.container.querySelector('.dragable-content')
+
+      this.controls.right.addEventListener('mousedown', e => {
+        window.onmousemove = this.throttle(e => {
+          this.resizeRight(e)
+          this.cssText = this.container.style.cssText
+        })
+      })
+
+      this.controls.left.addEventListener('mousedown', e => {
+        var offsetRight = this.container.offsetLeft + this.container.offsetWidth
+        var right = window.innerWidth - offsetRight
+        window.onmousemove = this.throttle(e => {
+          this.resizeLeft(e, offsetRight, right)
+          this.cssText = this.container.style.cssText
+        })
+      })
+
+      this.controls.bottom.addEventListener('mousedown', e => {
+        window.onmousemove = this.throttle(e => {
+          this.resizeBottom(e)
+          this.cssText = this.container.style.cssText
+        })
+      })
+
+      this.controls.top.addEventListener('mousedown', e => {
+        var offsetBottom = this.container.offsetTop + this.container.offsetHeight
+        var bottom = window.innerWidth - offsetBottom
+        window.onmousemove = this.throttle(e => {
+          this.resizeTop(e, offsetBottom, bottom)
+          this.cssText = this.container.style.cssText
+        })
+      })
+
+      this.controls.rt.addEventListener('mousedown', e => {
+        var offsetBottom = this.container.offsetTop + this.container.offsetHeight
+        var bottom = window.innerWidth - offsetBottom
+        window.onmousemove = this.throttle(e => {
+          this.resizeRight(e)
+          this.resizeTop(e, offsetBottom, bottom)
+          this.cssText = this.container.style.cssText
+        })
+      })
+
+      this.controls.rb.addEventListener('mousedown', e => {
+        window.onmousemove = this.throttle(e => {
+          this.resizeRight(e)
+          this.resizeBottom(e)
+          this.cssText = this.container.style.cssText
+        })
+      })
+
+      this.controls.lt.addEventListener('mousedown', e => {
+        var offsetRight = this.container.offsetLeft + this.container.offsetWidth
+        var right = window.innerWidth - offsetRight
+        var offsetBottom = this.container.offsetTop + this.container.offsetHeight
+        var bottom = window.innerWidth - offsetBottom
+        window.onmousemove = this.throttle(e => {
+          this.resizeLeft(e, offsetRight, right)
+          this.resizeTop(e, offsetBottom, bottom)
+          this.cssText = this.container.style.cssText
+        })
+      })
+
+      this.controls.lb.addEventListener('mousedown', e => {
+        var offsetRight = this.container.offsetLeft + this.container.offsetWidth
+        var right = window.innerWidth - offsetRight
+        window.onmousemove = this.throttle(e => {
+          this.resizeLeft(e, offsetRight, right)
+          this.resizeBottom(e)
+          this.cssText = this.container.style.cssText
+        })
+      })
+
+      this.controls.head.addEventListener('mousedown', e => {
+        if (this.canDrag) {
+          var startX = e.clientX,
+          startY = e.clientY,
+          startLeft = this.container.offsetLeft,
+          startTop = this.container.offsetTop
+        window.onmousemove = this.throttle(e => {
+          var deltaX = e.clientX - startX, deltaY = e.clientY - startY
+          this.container.style.left = `${startLeft + deltaX}px`
+          this.container.style.top = `${startTop + deltaY}px`
+          this.cssText = this.container.style.cssText
+        })
+        }
+      })
+
+      this.min.addEventListener('click', e => {
+        this.canDrag = false
+        this.hide(this.content)
+        this.hide(this.max)
+        this.show(this.restore)
+        this.container.style.width = '100px'
+        this.container.style.height = '30px'
+        this.container.style.left = '0px'
+        this.container.style.top = `${window.innerHeight - 30}px`
+      })
+
+      this.max.addEventListener('click', e => {
+        this.canDrag = false
+        this.hide(this.max)
+        this.show(this.restore)
+        this.container.style.top = '0';
+        this.container.style.left = '0';
+        this.container.style.width = '100%'
+        this.container.style.height = '100%'
+      })
+
+      this.restore.addEventListener('click', e => {
+        this.canDrag = true
+        this.container.style.width = null
+        this.container.style.height = null
+        this.container.style.left = null
+        this.container.style.top = null
+        this.show(this.content)
+        this.show(this.max)
+        this.hide(this.restore)
+        if (this.cssText !== '') {
+          var styleArr = this.cssText.replace(/\s/g, '').split(';')
+          styleArr.pop()
+          styleArr.forEach(e => {
+            var s = e.split(':')
+            this.container.style[s[0]] = s[1]
+          })
+        }
+      })
+
+      this.close.addEventListener('click', e => {
+        this.container.parentNode.removeChild(this.container)
       })
 
       Object.values(this.controls).forEach(control => {
@@ -158,75 +301,68 @@
           }
         })
       })
+    }
 
-      var riseRight = e => {
-        e.preventDefault()
-        window.onmousemove = e => {
-          var width = e.clientX - this.container.offsetLeft
-          width = width >= this.MAXWIDTH ? this.MAXWIDTH : width
-          width = width <= this.MINWIDTH ? this.MINWIDTH : width
-          this.container.style.right = null
-          this.container.style.width = `${width}px`
+    hide(element) {
+      if (element.classList.contains('show')) {
+        element.classList.remove('show')
+        element.classList.add('hide')
+      }
+    }
+
+    show(element) {
+      if (element.classList.contains('hide')) {
+        element.classList.remove('hide')
+        element.classList.add('show')
+      }
+    }
+
+    resizeRight(e) {
+      var width = e.clientX - this.container.offsetLeft
+      width = width >= this.MAXWIDTH ? this.MAXWIDTH : width
+      width = width <= this.MINWIDTH ? this.MINWIDTH : width
+      this.container.style.right = null
+      this.container.style.width = `${width}px`
+    }
+
+    resizeLeft(e, offsetRight, right) {
+      var width = offsetRight - e.clientX
+      width = width >= this.MAXWIDTH ? this.MAXWIDTH : width
+      width = width <= this.MINWIDTH ? this.MINWIDTH : width
+      this.container.style.width = `${width}px`
+      this.container.style.right = `${right}px`
+      if (width <= this.MAXWIDTH && width >= this.MINWIDTH) {
+        this.container.style.left = `${window.innerWidth - right - width}px`
+      }
+    }
+
+    resizeBottom(e) {
+      var height = e.clientY - this.container.offsetTop
+      height = height >= this.MAXHEIGHT ? this.MAXHEIGHT : height
+      height = height <= this.MINHEIGHT ? this.MINHEIGHT : height
+      this.container.style.height = `${height}px`
+    }
+
+    resizeTop(e, offsetBottom, bottom) {
+      var height = offsetBottom - e.clientY
+      height = height >= this.MAXHEIGHT ? this.MAXHEIGHT : height
+      height = height <= this.MINHEIGHT ? this.MINHEIGHT : height
+      this.container.style.height = `${height}px`
+      this.container.style.bottom = `${bottom}px`
+      if (height <= this.MAXHEIGHT && height >= this.MINHEIGHT) {
+        this.container.style.top = `${window.innerWidth - bottom - height}px`
+      }
+    }
+
+    throttle (fn, wait = 20) {
+      let timer
+      return function (...args) {
+        if (timer === undefined) {
+          let result = fn.apply(this, args)
+          timer = setTimeout(() => timer = undefined, wait)
+          return result
         }
       }
-
-      var riseLeft = e => {
-        e.preventDefault()
-        var offsetRight = this.container.offsetLeft + this.container.offsetWidth
-        var right = window.innerWidth - offsetRight
-        window.onmousemove = e => {
-          var width = offsetRight - e.clientX
-          width = width >= this.MAXWIDTH ? this.MAXWIDTH : width
-          width = width <= this.MINWIDTH ? this.MINWIDTH : width
-
-          this.container.style.width = `${width}px`
-          this.container.style.right = `${right}px`
-
-          if (width < this.MAXWIDTH && width > this.MINWIDTH) {
-            this.container.style.left = `${e.clientX}px`
-          } else if (width === this.MAXWIDTH || width === this.MINWIDTH) {
-            this.container.style.left = `${window.innerWidth - right - width}px`
-          }
-        }
-      }
-
-      var riseBottom = e => {
-        e.preventDefault()
-        window.onmousemove = e => {
-          var height = e.clientY - this.container.offsetTop
-          height = height >= this.MAXHEIGHT ? this.MAXHEIGHT : height
-          height = height <= this.MINHEIGHT ? this.MINHEIGHT : height
-          this.container.style.height = `${height}px`
-        }
-      }
-
-      var riseTop = e => {
-        e.preventDefault()
-        var offsetBottom = this.container.offsetTop + this.container.offsetHeight
-        var bottom = window.innerWidth - offsetBottom
-        window.onmousemove = e => {
-          var height = offsetBottom - e.clientY
-          height = height >= this.MAXHEIGHT ? this.MAXHEIGHT : height
-          height = height <= this.MINHEIGHT ? this.MINHEIGHT : height
-
-          this.container.style.height = `${height}px`
-          this.container.style.bottom = `${bottom}px`
-
-          if (height < this.MAXHEIGHT && height > this.MINHEIGHT) {
-            this.container.style.top = `${e.clientY}px`
-          } else if (height === this.MAXHEIGHT || height === this.MINHEIGHT) {
-            this.container.style.top = `${window.innerWidth - bottom - height}px`
-          }
-        }
-      }
-
-      this.controls.right.addEventListener('mousedown', riseRight)
-
-      this.controls.left.addEventListener('mousedown', riseLeft)
-
-      this.controls.bottom.addEventListener('mousedown', riseBottom)
-
-      this.controls.top.addEventListener('mousedown', riseTop)
     }
   }
   var dragable = new Dragable('dragable')
