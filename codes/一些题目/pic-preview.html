@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  .wrapper {
+    margin: 10px;
+    padding: 20px;
+  }
+
+  #list {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+  }
+
+  #list li {
+    margin: 10px;
+  }
+
+  #list img {
+    max-width: 120px;
+    cursor: pointer;
+  }
+
+  .mask {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+  }
+
+  .mask a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 32px;
+    display: block;
+    line-height: 2em;
+    padding: 0 20px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  #preview-previous {
+    left: 20px;
+  }
+
+  #preview-next {
+    right: 20px;
+  }
+
+  #preview-img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 50vw;
+    max-height: 90vh;
+  }
+</style>
+
+<body>
+  <div class="wrapper">
+    <ul id="list">
+      <li>
+        <img src="https://p4.ssl.qhimg.com/t01713d89cfdb45cdf5.jpg">
+      </li>
+      <li>
+        <img src="https://p4.ssl.qhimg.com/t01e456146c8f8a639a.jpg">
+      </li>
+      <li>
+        <img src="https://p1.ssl.qhimg.com/t015f613e2205b573d8.jpg">
+      </li>
+      <li>
+        <img src="https://p0.ssl.qhimg.com/t01290338a28018d404.jpg">
+      </li>
+      <li>
+        <img src="https://p3.ssl.qhimg.com/t01d9aa5ae469c8862e.jpg">
+      </li>
+      <li>
+        <img src="https://p3.ssl.qhimg.com/t01cb20d35fc4aa3c0d.jpg">
+      </li>
+      <li>
+        <img src="https://p5.ssl.qhimg.com/t0110b30256941b9611.jpg">
+      </li>
+    </ul>
+  </div>
+  <div class="mask">
+    <a id="preview-previous" href="javasript:void(0)">&lt;</a>
+    <img id="preview-img" src="" alt="">
+    <a id="preview-next" href="javasript:void(0)">&gt;</a>
+  </div>
+  <script>
+    function setPreviewBehavior(subjects) {
+      if (!Array.isArray(subjects)) {
+        subjects = subjects.length ? Array.from(subjects) : [subjects]
+      }
+      const previewEvent = document.createEvent('Event')
+      previewEvent.initEvent('preview', true, true)
+      previewEvent.previewTargets = subjects.map(e => e.src)
+      subjects.forEach(sub => sub.preview = () => sub.dispatchEvent(previewEvent))
+    }
+
+    let imgList = document.querySelector('#list')
+    let imgs = document.querySelectorAll('#list img')
+    let previewMask = document.querySelector('.mask')
+    let previewImg = document.querySelector('#preview-img')
+    let previewPrevious = document.querySelector('#preview-previous')
+    let previewNext = document.querySelector('#preview-next')
+
+    previewMask.addEventListener('click', e => {
+      if (e.target === previewMask) previewMask.style.display = 'none'
+    })
+
+    imgList.addEventListener('click', e => {
+      if (e.target.preview) e.target.preview()
+    })
+
+    imgList.addEventListener('preview', e => {
+      let src = e.target.src,
+        imgs = e.previewTargets,
+        idx = imgs.indexOf(src)
+
+      previewMask.style.display = 'block'
+      previewImg.src = src
+
+      function updateBottoms(idx) {
+        previewPrevious.style.display = idx ? 'block' : 'none'
+        previewNext.style.display = idx < imgs.length - 1 ? 'block' : 'none'
+      }
+
+      updateBottoms(idx)
+      previewPrevious.onclick = e => {
+        previewImg.src = imgs[--idx]
+        updateBottoms(idx)
+      }
+      previewNext.onclick = e => {
+        previewImg.src = imgs[++idx]
+        updateBottoms(idx)
+      }
+    })
+
+    setPreviewBehavior(imgs)
+  </script>
+</body>
+
+</html>

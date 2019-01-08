@@ -189,3 +189,12 @@ export default {
   }
 }
 </script>
+
+## 自动补全
+
+<iframe width="100%" height="550" src="//jsfiddle.net/happysir/kcweu1rj/3/embedded/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+
+## 可缩放窗口
+
+<iframe width="100%" height="550" src="//jsfiddle.net/happysir/vexohp2u/11/embedded/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+

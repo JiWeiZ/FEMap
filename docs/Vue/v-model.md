@@ -2,13 +2,13 @@
 
 要求实现这么一个组件
 
-```
+```html
 <label-input v-model="name">姓名</label-input>
 ```
 
 渲染出来的html如下，并实现input的value和变量name的双向绑定。
 
-```
+```html
 <label>
 	姓名
 	<input type="text">

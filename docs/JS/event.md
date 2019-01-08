@@ -63,3 +63,31 @@ options是一个对象，可用的选项如下：
 | e.preventDefault()           | 取消事件默认行为                                             |
 | e.stopPropagation()          | 取消事件进一步捕获或冒泡                                     |
 | e.stopImmediatePropagation() | 取消事件进一步捕获或冒泡，同时阻止剩下的所有事件处理程序的调用。参考: [MDN](https://developer.mozilla.org/zh-CN/docs/Web/API/Event/stopImmediatePropagation) |
+
+## 自定义事件
+
+### 创建事件
+
+旧版
+
+```js
+// 事件由多种类型，如果是自定义的UI事件，就应该写成UIEvent
+var barEvent = document.createEvent('Event')
+// 语法： event.initEvent(type, bubbles, cancelable)
+barEvent.initEvent('bar', true, true)
+```
+
+新版
+
+```js
+// 创建一个支持冒泡且不能被取消的look事件
+var ev = new Event("look", {"bubbles":true, "cancelable":false})
+```
+
+### 派发事件
+
+```js
+element.dispatchEvent(barEvent)
+```
+
+dispatchEvent 是分发模型流程实现的最后一步。 其中的事件可以通过document.createEvent 方法创建， 并通过 initEvent 或其他的初始化方法。其中barEvent是要被派发的事件对象，element是可以触发事件的目标。

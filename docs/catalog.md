@@ -35,16 +35,14 @@
     2. 手写bind（√）
     3. 手写object.create（√）
     4. 手写ajax（√）
-    5. 手写promise（15晚）
+    5. 手写promise（√）
     6. 手写async（√）
     7. 手写onready，jQuery的实现方案（16上）
     8. 手写map（√）
     9. 修正setInterval
-14. 重绘和回流（√，16下）
+14. 重绘和回流
 15. 递归的优化（16晚）（√）
-16. 跨域（16晚）（√）
-    1. JSONP（√）
-    2. 图像ping
+16. 跨域（√）
 17. 异步解决方案（√）
     1. 回调
     2. promise
@@ -140,9 +138,16 @@ webpack
    1. 轮播图
    2. 图片预览
    3. 红绿灯
-   4. 拖拽框
+   4. <span style="background:yellow">拖拽框</span>
    5. 进度条
    6. 前端裁剪上传
-   7. 自动补全
+   7. <span style="background:yellow">自动补全</span>
    8. 连击
    9. 开关按钮
+
+Grid
+
+url发生了什么
+
+vue源码
+

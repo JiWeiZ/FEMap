@@ -7,7 +7,7 @@ function selectSort(arr) {
     for (var j = i; j < len; j++) {
       if (arr[idxMin] > arr[j]) idxMin = j
     }
-    if (i !== idxMin) {
+     if (i !== idxMin) {
       [arr[i], arr[idxMin]] = [arr[idxMin], arr[i]]
     }
   }
