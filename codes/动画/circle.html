@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .wrapper {
+            position: relative;
+            margin: 40px;
+            padding: 40px;
+            border: 1px solid;
+        }
+
+        .circle-wrapper {
+            margin: 0 auto;
+            width: 200px;
+            height: 200px;
+            border: 1px dashed;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .circle {
+            display: inline-block;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: red;
+        }
+
+        .circle-position {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            margin-top: -10px;
+            margin-left: -10px;
+        }
+
+        .circle-position-1 {
+            transform-origin: 110px 10px;
+        }
+
+        .circle-position-2 {
+            left: 50%;
+            transform-origin: center;
+        }
+
+        @keyframes circle {
+            0% {
+                transform: rotate(0deg)
+            }
+
+            100% {
+                transform: rotate(360deg)
+            }
+        }
+
+        .rotate {
+            animation: circle 4s linear infinite
+        }
+
+        .wall-circle-1 {
+            position: absolute;
+            left: 10px;
+            transform-origin: 20px 10px;
+            display: block;
+        }
+
+        .wall {
+            margin-left: 200px;
+            width: 50px;
+            height: 400px;
+            background: gray;
+        }
+
+        .wall-button {
+            margin-top: 20px;
+        }
+
+        .wall-play-zone {
+            position: relative;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        .wall-circle-2 {
+            position: absolute;
+            left: 410px;
+            transform-origin: 20px 10px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div>CSS圆周运动1（小球自己转动）</div>
+        <div class="circle-wrapper">
+            <div class="circle circle-position circle-position-1 rotate"></div>
+        </div>
+    </div>
+    <div class="wrapper">
+        <div>CSS圆周运动2（小球的父亲转动）</div>
+        <div class="circle-wrapper rotate">
+            <div class="circle circle-position css2"></div>
+        </div>
+    </div>
+    <div class="wrapper">
+        <div>JS圆周运动1（rotate）</div>
+        <div class="circle-wrapper">
+            <div class="circle circle-position circle-position-1" id="js1"></div>
+        </div>
+    </div>
+    <div class="wrapper">
+        <div>JS圆周运动2（参数方程）</div>
+        <div class="circle-wrapper">
+            <div class="circle circle-position circle-position-2" id="js2"></div>
+        </div>
+    </div>
+    <div class="wrapper">
+        <div>JS椭圆运动</div>
+        <div class="circle-wrapper" style="height: 100px;">
+            <div class="circle circle-position circle-position-2" id="js3"></div>
+        </div>
+    </div>
+    <div class="wrapper">
+        <div class="wall-play-zone">
+            <div class="circle wall-circle-1" id="wall-ball-1"></div>
+            <div class="wall"></div>
+        </div>
+    </div>
+    <div class="wrapper">
+        <div class="wall-play-zone">
+            <div class="circle wall-circle-1" id="wall-ball-2_1"></div>
+            <div class="circle wall-circle-2" id="wall-ball-2_2"></div>
+            <div class="wall"></div>
+        </div>
+    </div>
+</body>
+
+<script>
+    let jsCircle1 = document.querySelector('#js1')
+    function startJsCircle1() {
+        let startTime = Date.now(),
+            cycle = 4000
+        requestAnimationFrame(function update() {
+            let currentTime = Date.now()
+            let p = (currentTime - startTime) / cycle
+            jsCircle1.style.transform = `rotate(${360 * p}deg)`
+            requestAnimationFrame(update)
+        })
+    }
+    startJsCircle1()
+
+    let jsCircle2 = document.querySelector('#js2')
+    function startJsCircle2() {
+        let cycle = 4000
+        requestAnimationFrame(function update() {
+            let currentTime = Date.now()
+            let x = 100 * Math.cos((2 * Math.PI / cycle) * currentTime)
+            let y = 100 * Math.sin((2 * Math.PI / cycle) * currentTime)
+            jsCircle2.style.transform = `translate(${x}px, ${y}px)`
+            requestAnimationFrame(update)
+        })
+    }
+    startJsCircle2()
+
+    let jsCircle3 = document.querySelector('#js3')
+    function startJsCircle3() {
+        let cycle = 4000
+        requestAnimationFrame(function update() {
+            let currentTime = Date.now()
+            let x = 100 * Math.cos((2 * Math.PI / cycle) * currentTime)
+            let y = 50 * Math.sin((2 * Math.PI / cycle) * currentTime)
+            jsCircle3.style.transform = `translate(${x}px, ${y}px)`
+            requestAnimationFrame(update)
+        })
+    }
+    startJsCircle3()
+
+    let wallBall1 = document.querySelector('#wall-ball-1')
+    function hitWall1(distanceX, distanceY, ballRadius, vx) {
+        let startTime = Date.now(),
+            cycle = 2000
+        requestAnimationFrame(function update() {
+            let currentTime = Date.now()
+            let p = (currentTime - startTime) / cycle
+            let x,
+                y = 3 * distanceY * p ** 2
+            px = vx * p
+            if (px < 1 && px > 0) {
+                x = distanceX * px - ballRadius / 2
+            } else {
+                x = distanceX * (2 - px) - ballRadius / 2
+            }
+            wallBall1.style.transform = `translate(${x}px, ${y}px)`
+            if (p < 1) {
+                requestAnimationFrame(update)
+            } else {
+                setTimeout(() => {
+                    hitWall1(200, 400, 20, 4)
+                }, 1000)
+            }
+        })
+    }
+    hitWall1(200, 400, 20, 4)
+
+    let wallBall2_1 = document.querySelector('#wall-ball-2_1'),
+        wallBall2_2 = document.querySelector('#wall-ball-2_2')
+    function hitWall2(distanceX, distanceY, ballRadius, vx) {
+        let startTime = Date.now(),
+            cycle = 2000
+        requestAnimationFrame(function update() {
+            let t = Date.now() - startTime
+            let p = Math.min(t / cycle, 1)
+            let x,
+                y = 3 * distanceY * p ** 2
+            px = vx * p
+            x = (distanceX - ballRadius / 2) * px
+            if (x > distanceX - ballRadius / 2) {
+                wallBall2_1.style.display = 'none'
+                wallBall2_2.style.display = 'block'
+            } else {
+                wallBall2_1.style.display = 'block'
+                wallBall2_2.style.display = 'none'
+            }
+            wallBall2_1.style.transform = `translate(${x}px, ${y}px)`
+            wallBall2_2.style.transform = `translate(${-x-ballRadius}px, ${y}px)`
+            if (p < 1) {
+                requestAnimationFrame(update)
+            } else {
+                setTimeout(() => {
+                    hitWall2(200, 400, 20, 4)
+                }, 1000)
+            }
+        })
+    }
+    hitWall2(200, 400, 20, 4)
+
+</script>
+
+</html>

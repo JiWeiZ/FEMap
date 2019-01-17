@@ -99,78 +99,81 @@ Tufekci 给 Facebook 提供了一些建议，包括与外部研究人员分享�
 </body>
 <script>
   class Editor {
-    constructor(textarea, preview) {
-      this.textarea = textarea
-      this.preview = preview
+    constructor(textareaID, previewID) {
+      this.textarea = document.getElementById(textareaID)
+      this.preview = document.getElementById(previewID)
     }
     update() {
       this.preview.innerHTML = markdown.toHTML(this.textarea.value)
     }
   }
 
-  class PubSub {
-    constructor() {
-      this.subscribers = {}
-    }
-
-    pub(type, data) {
-      const subscribers = this.subscribers[type]
-      subscribers.forEach(subscriber => {
-        subscriber(data)
-      })
-    }
-
-    sub(type, target, callback) {
-      this.subscribers[type] = this.subscribers[type] || []
-      this.subscribers[type].push(callback.bind(target))
-    }
-  }
-
-  const editor = new Editor(textarea, preview)
+  var editor = new Editor('textarea', 'preview')
   editor.update()
 
-  const mediator = new PubSub()
-
-  function pubScroll(evt) {
-    const target = evt.target,
-      scrollRange = target.scrollHeight - target.clientHeight,
-      p = target.scrollTop / scrollRange
-    mediator.pub('scroll', p)
+  class Mediator {
+    constructor() {
+      this.events = {}
+    }
+    pub(publisher, type, data) {
+      this.events[type].forEach(event => {
+        if (event.publishers.includes(publisher)) {
+          event.solution(data)
+        }
+      })
+    }
+    sub(subscriber, type, publishers, solution) {
+      this.events[type] = this.events[type] || []
+      this.events[type].push({
+        subscriber,
+        publishers,
+        solution: solution.bind(subscriber)
+      })
+    }
   }
 
-  function subScroll(p) {
-    this.scrollTop = (this.scrollHeight - this.clientHeight) * p
-  }
+  var mediator = new Mediator()
 
   function monopoly(fn, wait = 100) {
     return function (...args) {
-      if (!monopoly.currentRunFn) {
-        monopoly.currentRunFn = fn
+      if (!monopoly.currentRun) {
+        monopoly.currentRun = fn
       }
-      if (monopoly.currentRunFn === fn) {
+      if (monopoly.currentRun === fn) {
         clearTimeout(monopoly.timer)
-        monopoly.timer = setTimeout(() => delete monopoly.currentRunFn, wait)
+        monopoly.timer = setTimeout(() => delete monopoly.currentRun, wait)
         return fn.apply(this, args)
       }
     }
   }
 
-  function deepCloneFn(fn) {
+  function cloneFn (fn) {
     return function (...args) {
       return fn.apply(this, args)
     }
   }
 
-  textarea.addEventListener('scroll', monopoly(deepCloneFn(pubScroll)))
-  mediator.sub('scroll', preview, subScroll)
-  preview.addEventListener('scroll', monopoly(deepCloneFn(pubScroll)))
-  mediator.sub('scroll', textarea, subScroll)
-  mediator.sub('scroll', hintbar, function (p) {
+  function sendScrollPercent(e) {
+    var target = e.target
+    var scrollRange = target.scrollHeight - target.clientHeight
+    var p = target.scrollTop / scrollRange
+    mediator.pub(this, 'scroll', p)
+  }
+
+  function handleScrollPercent(p) {
+    this.scrollTop = (this.scrollHeight - this.clientHeight) * p
+  }
+
+  textarea.addEventListener('scroll', monopoly(cloneFn(sendScrollPercent.bind(textarea))))
+  preview.addEventListener('scroll', monopoly(cloneFn(sendScrollPercent.bind(preview))))
+  mediator.sub(textarea, 'scroll', [preview], handleScrollPercent)
+  mediator.sub(preview, 'scroll', [textarea], handleScrollPercent)
+  mediator.sub(hintbar, 'scroll', [textarea], function (p) {
     this.innerHTML = Math.round(100 * p) + '%'
   })
+
 </script>
 
-</html>
 </body>
 
 </html>

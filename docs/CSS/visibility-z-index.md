@@ -18,7 +18,7 @@
 
 ## z-index
 
-1. 适用范围：<span style="background:yellow">定位元素</span>
+1. 适用范围：<span style="background:yellow">定位元素</span><br/>z-index只能在position属性值为relative或absolute或fixed的元素上有效。
 2. 垂直于屏幕，指向用户眼睛的方向就是Z轴；数值越大，越靠近用户的眼睛
 3. 堆叠上下文：
    1. 在同一个堆叠上下文内比较z-index

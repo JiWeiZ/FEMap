@@ -346,7 +346,7 @@ function Car () {
 }
 Object.defineProperty(Car.prototype, 'color', {
     value: 'white',
-    writable: true
+    writable: false
 })
 var car = new Car ();
 car.color = 'black';
