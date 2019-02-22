@@ -1,43 +1,80 @@
+## 安装
+
+```
+npm i -D webpack webpack-cli
+```
+
+webpack 4+ 需要安装webpack-cli
+
+## 起步
+
+配置webpack.config.js
+
+```js
+const path = require('path')
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist')
+  }
+}
+```
+
+然后在dist/index.html里修改引用的js文件为bundle.js
+
+在命令行输入
+
+```
+npx webpack --config webpack.config.js
+```
+
+即可构建打包文件
+
+然后可以用npm script来简化操作
+
+## 管理资源
+
+### 加载CSS
+
+要想在js文件中加载css，需要引入style-loader和css-loader
+
+```
+npm i -D style-loader css-loader
+```
+
+我并没有在html文件中引入css，但是页面的字体变红了，是因为我在js文件中引入了css，webpack通过style-loader和css-loader给css内联到head标签里去了。
+
+后面的几个略看了一下，发现加载数据这小节有一个很有意思的地方，就是在构建过程中加载数据并打包到模块中，然后浏览器加载模块以后就立即从模块中解析数据，看起来很不错但是没搞懂具体怎么玩的
+
+这种import加载资源的方式有利于模块化管理
+
 ## 管理输出
 
-HtmlWebpackPlugin：管理入口文件名的和生成文件名的匹配问题
+我们可以给入口提供多个文件，然后打包到一个文件中
 
-CleanWebpackPlugin：清理dist文件夹
+```js
+const path = require('path')
+
+module.exports = {
+  entry: {
+    app: './src/index.js',
+    print: './src/print.js'
+  },
+  output: {
+    filename: '[name]-bundle.js',
+    path: path.resolve(__dirname, 'dist')
+  }
+}
+```
+
+新生成的文件叫作app-bundle.js，然鹅index.html仍旧引用的是bundle.js，手动修改太麻烦了
+
+有一个插件叫html-webpack-plugin可以解决这问题。
+
+还可以看一下 html-webpack-template，但是我没看
 
 ## 开发
 
-source map：将编译后的代码映射回原始源代码
-
-inline-source-map：这是一个devtool
-
-自动编译代码的工具：
-
-1. webpack's Watch Mode
-2. webpack-dev-server（☆）
-   1. devSever是一个对象，指明一个文件夹作为可访问文件，默认端口8080
-   2. npm run webpack-dev-server --open
-   3. 改一点就得重新编译然后加载，慢的要死
-3. webpack-dev-middleware
-   1. vue脚手架就用的这个
-   2. 这是一个容器，把 webpack 处理后的文件传递给一个服务器(server)
-   3. output添加publicPath，publicPath 会在服务器脚本用到
-
-每次更新源代码都会重新编译加载，慢点要死，模块热替换应该是用来解决这个问题的。
-
-## 模块热替换
-
-## tree shaking
-
-1. 什么是tree shaking：
-   1. 指的是去除JS中未引用的代码，基于静态结构特性如import和export，这个概念起源于rollup
-2. webpack的tree shaking解决了什么问题
-   1. 安全删除文件中未引用的部分
-3. 如何解决的呢？（简述）
-   1. 将package.json的"sideEffects"属性作为标记，向compiler提供提示，表明哪些模块是纯ES6文件
-4. 用到了哪些概念，主要的概念和次要的概念，主要的概念要搞懂如何得到最终结果的，而次要的概念只要了解最终结果是什么就可以
-   1. package.json的"sideEffects"属性
-   2. compiler
-   3. 纯ES6文件
-5. 能否画一个tree shaking解决问题的流程图呢？
-6. 最后一步，复述刚才学到的东西
+可以使用webpack-dev-middleware这个中间件来想服务器传递打包后的文件
 

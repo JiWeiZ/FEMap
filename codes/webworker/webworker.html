@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <div>
+    <p><button id="run">运行</button></p>
+    <div id="show">
+    </div>
+    <div id="tips">主线程正在运行中</div>
+  </div>
+  <script>
+    function getPrimeNumber(n) {
+      var primeNumberIter = (function* () {
+        yield 2
+        var cache = [2]
+        for (var i = 3; i < Infinity; i++) {
+          for (var j = 0; j < cache.length; j++) {
+            if (i % cache[j] === 0) break;
+            if (cache[j] ** 2 > i) {
+              yield i
+              cache.push(i)
+              break
+            }
+          }
+        }
+      })()
+
+      let result
+      for (let i = 0; i < n; i++) {
+        result = primeNumberIter.next()
+      }
+      return result.value
+    }
+    var myTask = `
+    function getPrimeNumber(n) {
+      var primeNumberIter = (function* () {
+        yield 2
+        var cache = [2]
+        for (var i = 3; i < Infinity; i++) {
+          for (var j = 0; j < cache.length; j++) {
+            if (i % cache[j] === 0) break;
+            if (cache[j] ** 2 > i) {
+              yield i
+              cache.push(i)
+              break
+            }
+          }
+        }
+      })()
+
+      let result
+      for (let i = 0; i < n; i++) {
+        result = primeNumberIter.next()
+      }
+      return result.value
+    }
+
+    self.addEventListener('message', e => {
+      self.postMessage('第' + e.data + '个素数是：' + getPrimeNumber(e.data))
+      self.close()
+    })
+    `
+    var blob = new Blob([myTask])
+
+
+    run.onclick = function () {
+      var myWorker = new Worker(window.URL.createObjectURL(blob))
+      myWorker.onmessage = function (e) {
+        show.innerHTML += `<p>Received from worker：${e.data}</p>`
+        myWorker.terminate()
+      }
+      myWorker.postMessage(1000000)
+      show.innerHTML = `<p>第1000000个素数是：${getPrimeNumber(1000000)}</p>`
+    }
+
+    var timer = setInterval(() => tips.innerText += '.', 1000)
+    setTimeout(() => {
+      tips.innerHTML += '<p>停止计数</p>'
+      clearInterval(timer)
+    }, 1000 * 60)
+  </script>
+</body>
+
+</html>
